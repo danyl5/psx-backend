@@ -30,7 +30,7 @@ const scriptSchema = new mongoose.Schema(
   }
 );
 
-scriptSchema.index({ symbol: 1 }, { unique: true });
+scriptSchema.index({ unique: true });
 
 const Script = mongoose.model("Script", scriptSchema);
 

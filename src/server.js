@@ -12,6 +12,9 @@ import userRoutes from "./routes/userRoutes.js";
 import psxRoutes from "./routes/psxRoutes.js";
 import watchlistRoutes from "./routes/watchlistRoutes.js";
 import myTradeRoutes from "./routes/myTradeRoutes.js";
+import dns from 'node:dns';
+
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 dotenv.config();
 connectDB();
