@@ -24,7 +24,7 @@ const app = express();
 app.use(
   cors({
     // Allow local frontend app; can be configured per environment.
-    origin: process.env.CLIENT_URL || "http://localhost:1234"
+    origin: process.env.CLIENT_URL
   })
 );
 app.use(express.json());
