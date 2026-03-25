@@ -2,6 +2,7 @@ import { fetchStockPriceFromPSX } from "../services/psxService.js";
 import { fetchMarketUpdatesFromPSX } from "../services/psxService.js";
 import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
+import { fetchAllShariaStocks } from "../services/psxService.js";
 
 // Simple delay helper for retry logic
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -149,7 +150,18 @@ export const getStockAnnouncements = async (req, res) => {
   }
 };
 
+export const getAllShariahStocks = async (req, res) => {
+  try {
+    const data = await fetchAllShariaStocks();
 
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getAllShariahStocks controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch shariah stocks from PSX." });
+  }
+};
 
 
 

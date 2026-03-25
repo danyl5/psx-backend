@@ -4,6 +4,7 @@ import {
   getMultipleStockPricesFromPSX,
   getStockDividends,
   getStockAnnouncements,
+  getAllShariahStocks,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -19,5 +20,9 @@ router.get("/dividends/:symbol", getStockDividends);
 
 // GET /api/psx/announcements/:symbol?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/announcements/:symbol", getStockAnnouncements);
+
+router.get("/shariah-stocks", getAllShariahStocks);
+
+
 
 export default router;

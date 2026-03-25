@@ -178,3 +178,14 @@ export async function fetchStockAnnouncementsFromPSX(symbol, { startDate, endDat
     throw new Error("Failed to fetch announcements");
   }
 }
+
+export async function fetchAllShariaStocks(symbol, { startDate, endDate } = {}) {
+  try {
+    const url = "https://beta-restapi.sarmaaya.pk/api/indices/KMIALLSHR/companies";
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all shariah stocks:", error.message);
+    throw new Error("Failed to fetch shariah stocks");
+  }
+}
