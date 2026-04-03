@@ -196,10 +196,7 @@ export async function fetchStockAnnouncementsFromPSX(
   }
 }
 
-export async function fetchAllShariaStocks(
-  symbol,
-  { startDate, endDate } = {},
-) {
+export async function fetchAllShariaStocks() {
   try {
     const url =
       "https://beta-restapi.sarmaaya.pk/api/indices/KMIALLSHR/companies";

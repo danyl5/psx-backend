@@ -5,6 +5,7 @@ import {
   getStockDividends,
   getStockAnnouncements,
   getAllShariahStocks,
+  getNotifications,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -22,6 +23,8 @@ router.get("/dividends/:symbol", getStockDividends);
 router.get("/announcements/:symbol", getStockAnnouncements);
 
 router.get("/shariah-stocks", getAllShariahStocks);
+
+router.get("/notifications/:symbol", getNotifications);
 
 
 
