@@ -17,15 +17,9 @@ export async function fetchStockPriceFromPSX(symbol) {
     // Price selector based on PSX layout
     const priceText = $(".quote__close").first().text().trim();
     const changeValueText = $(".change__value").last().text().trim();
-    const changePercentageText = $(".change__percent")
-      .text()
-      .trim();
+    const changePercentageText = $(".change__percent").text().trim();
 
-    const price = String(
-      Number(
-        priceText.replace(/Rs\.?\s*/i, "")
-      )
-    );
+    const price = String(Number(priceText.replace(/Rs\.?\s*/i, "")));
 
     const changeValue = changeValueText;
     const changePercentage = changePercentageText;
@@ -34,10 +28,13 @@ export async function fetchStockPriceFromPSX(symbol) {
     const regPanel = $('.tabs__panel[data-name="REG"]');
 
     // ---- CODE (Open, High, Low, Volume) ----
-    let open = null, high = null, low = null, volume = null, ldcp = null;
+    let open = null,
+      high = null,
+      low = null,
+      volume = null,
+      ldcp = null;
 
     regPanel.find(".stats.stats--noborder .stats_item").each((_, el) => {
-
       const label = $(el).find(".stats_label").text().trim().toLowerCase();
       const valueText = $(el).find(".stats_value").text().trim();
       const value = valueText;
@@ -51,13 +48,13 @@ export async function fetchStockPriceFromPSX(symbol) {
     // --------------------------------------------
 
     // ---- Fetch LDCP ----
-    const ldcpEl = regPanel.find('.stats .stats_item .stats_label')
+    const ldcpEl = regPanel
+      .find(".stats .stats_item .stats_label")
       .filter((_, el) => $(el).text().trim() === "LDCP")
-      .closest('.stats_item')
-      .find('.stats_value');
+      .closest(".stats_item")
+      .find(".stats_value");
 
     ldcp = ldcpEl.text().trim();
-
 
     if (Number.isNaN(price)) {
       return { symbol, price: null };
@@ -71,7 +68,17 @@ export async function fetchStockPriceFromPSX(symbol) {
       return { symbol, changePercentage: null };
     }
 
-    return { symbol, price, changeValue, changePercentage, open, high, low, volume, ldcp };
+    return {
+      symbol,
+      price,
+      changeValue,
+      changePercentage,
+      open,
+      high,
+      low,
+      volume,
+      ldcp,
+    };
   } catch (error) {
     console.error("Error fetching PSX price for", symbol, error.message);
     return { symbol, price: null };
@@ -109,11 +116,8 @@ export async function fetchMarketUpdatesFromPSX() {
       .text()
       .trim();
 
-      // Market time text
-    const marketDate = kse100Panel
-    .find(".marketIndices__date")
-    .text()
-    .trim();
+    // Market time text
+    const marketDate = kse100Panel.find(".marketIndices__date").text().trim();
 
     // Get timestamp attribute
     const marketTime = kse100Panel.attr("data-date");
@@ -153,9 +157,19 @@ export async function fetchMarketUpdatesFromPSX() {
 
 export async function fetchStockDividendsFromPSX(symbol) {
   try {
+    const currentYear = String(new Date().getFullYear());
     const response = await axios.get(
       `https://beta-restapi.sarmaaya.pk/api/stocks/dividends/${symbol}`,
     );
+
+    // Filter payoutHistory by current year
+    if (response.data.response?.payoutHistory) {
+      response.data.response.payoutHistory =
+        response.data.response.payoutHistory.filter(
+          (payout) => payout.year === currentYear,
+        );
+    }
+
     return response.data;
   } catch (error) {
     console.error("Error fetching dividends for", symbol, error.message);
@@ -163,7 +177,10 @@ export async function fetchStockDividendsFromPSX(symbol) {
   }
 }
 
-export async function fetchStockAnnouncementsFromPSX(symbol, { startDate, endDate } = {}) {
+export async function fetchStockAnnouncementsFromPSX(
+  symbol,
+  { startDate, endDate } = {},
+) {
   try {
     const url = `https://beta-restapi.sarmaaya.pk/api/stocks/announcements/${symbol}`;
     const params = new URLSearchParams();
@@ -179,9 +196,13 @@ export async function fetchStockAnnouncementsFromPSX(symbol, { startDate, endDat
   }
 }
 
-export async function fetchAllShariaStocks(symbol, { startDate, endDate } = {}) {
+export async function fetchAllShariaStocks(
+  symbol,
+  { startDate, endDate } = {},
+) {
   try {
-    const url = "https://beta-restapi.sarmaaya.pk/api/indices/KMIALLSHR/companies";
+    const url =
+      "https://beta-restapi.sarmaaya.pk/api/indices/KMIALLSHR/companies";
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
