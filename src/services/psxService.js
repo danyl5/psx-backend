@@ -196,6 +196,20 @@ export async function fetchStockAnnouncementsFromPSX(
   }
 }
 
+export async function fetchStockInsiderTransactionsFromPSX(
+  symbol
+) {
+  try {
+    const url = `https://beta-restapi.sarmaaya.pk/api/stocks/stock-insiders/${symbol}`;
+   
+    const response = await axios.get(`${url}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching insider transactions for", symbol, error.message);
+    throw new Error("Failed to fetch insider transactions");
+  }
+}
+
 export async function fetchAllShariaStocks() {
   try {
     const url =

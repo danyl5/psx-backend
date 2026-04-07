@@ -3,6 +3,7 @@ import { fetchMarketUpdatesFromPSX } from "../services/psxService.js";
 import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
+import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { getStockNotifications } from "../services/notificationsService.js";
 
 // Simple delay helper for retry logic
@@ -148,6 +149,28 @@ export const getStockAnnouncements = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch announcements from PSX." });
+  }
+};
+
+export const getStockInsiderTransactions = async (req, res) => {
+  try {
+    const symbol = (req.params.symbol || req.query.symbol || "")
+      .toString()
+      .trim()
+      .toUpperCase();
+
+    if (!symbol) {
+      return res.status(400).json({ message: "Symbol is required." });
+    }
+
+    const data = await fetchStockInsiderTransactionsFromPSX(symbol);
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getStockInsiderTransactions controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch insider transactions from PSX." });
   }
 };
 
