@@ -225,7 +225,6 @@ export async function fetchAllShariaStocks() {
 }
 
 export async function fetchAllUpcomingPayouts({ from, to }) {
-  console.log("Fetching upcoming payouts with from:", from, "to:", to);
   try {
     const url = "https://beta-restapi.sarmaaya.pk/api/announcements/payouts";
 
