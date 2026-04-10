@@ -196,16 +196,18 @@ export async function fetchStockAnnouncementsFromPSX(
   }
 }
 
-export async function fetchStockInsiderTransactionsFromPSX(
-  symbol
-) {
+export async function fetchStockInsiderTransactionsFromPSX(symbol) {
   try {
     const url = `https://beta-restapi.sarmaaya.pk/api/stocks/stock-insiders/${symbol}`;
-   
+
     const response = await axios.get(`${url}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching insider transactions for", symbol, error.message);
+    console.error(
+      "Error fetching insider transactions for",
+      symbol,
+      error.message,
+    );
     throw new Error("Failed to fetch insider transactions");
   }
 }
@@ -219,5 +221,23 @@ export async function fetchAllShariaStocks() {
   } catch (error) {
     console.error("Error fetching all shariah stocks:", error.message);
     throw new Error("Failed to fetch shariah stocks");
+  }
+}
+
+export async function fetchAllUpcomingPayouts({ from, to }) {
+  console.log("Fetching upcoming payouts with from:", from, "to:", to);
+  try {
+    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/payouts";
+
+    const params = new URLSearchParams();
+
+    if (from) params.set("from", String(from));
+    if (to) params.set("to", String(to));
+
+    const response = await axios.get(`${url}?${params.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all upcoming payouts:", error.message);
+    throw new Error("Failed to fetch upcoming payouts");
   }
 }

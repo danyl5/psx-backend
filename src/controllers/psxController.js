@@ -4,6 +4,7 @@ import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
+import { fetchAllUpcomingPayouts } from "../services/psxService.js";
 import { getStockNotifications } from "../services/notificationsService.js";
 
 // Simple delay helper for retry logic
@@ -11,7 +12,10 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Fetch a single symbol with basic retry so that intermittent
 // scraping/network issues don't randomly return null for one symbol.
-async function fetchStockPriceFromPSXWithRetry(symbol, { retries = 2, delayMs = 700 } = {}) {
+async function fetchStockPriceFromPSXWithRetry(
+  symbol,
+  { retries = 2, delayMs = 700 } = {},
+) {
   let lastResult = null;
 
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -50,11 +54,13 @@ export const getMultipleStockPricesFromPSX = async (req, res) => {
         .json({ message: "symbols must be a non-empty array." });
     }
 
-    const symbols = [...new Set(
-      symbolsInput
-        .map((s) => (s || "").toString().trim().toUpperCase())
-        .filter((s) => s),
-    )];
+    const symbols = [
+      ...new Set(
+        symbolsInput
+          .map((s) => (s || "").toString().trim().toUpperCase())
+          .filter((s) => s),
+      ),
+    ];
 
     if (symbols.length === 0) {
       return res
@@ -195,5 +201,20 @@ export const getAllShariahStocks = async (req, res) => {
   }
 };
 
+export const getAllUpcomingPayouts = async (req, res) => {
+  try {
+    const from = (req.query.from || "").toString().trim();
+    const to = (req.query.to || "").toString().trim();
+    const data = await fetchAllUpcomingPayouts({
+      from: from || undefined,
+      to: to || undefined,
+    });
 
-
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getAllUpcomingPayouts controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch upcoming payouts from PSX." });
+  }
+};

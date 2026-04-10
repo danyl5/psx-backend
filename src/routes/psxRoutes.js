@@ -7,6 +7,7 @@ import {
   getAllShariahStocks,
   getNotifications,
   getStockInsiderTransactions,
+  getAllUpcomingPayouts,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -22,6 +23,9 @@ router.get("/dividends/:symbol", getStockDividends);
 
 // GET /api/psx/announcements/:symbol?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/announcements/:symbol", getStockAnnouncements);
+
+// GET /api/psx/payouts?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+router.get("/payouts", getAllUpcomingPayouts);
 
 router.get("/insider-transactions/:symbol", getStockInsiderTransactions);
 
