@@ -5,6 +5,7 @@ import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
+import { fetchAllInsiderTransactions } from "../services/psxService.js";
 import { getStockNotifications } from "../services/notificationsService.js";
 
 // Simple delay helper for retry logic
@@ -216,5 +217,23 @@ export const getAllUpcomingPayouts = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch upcoming payouts from PSX." });
+  }
+};
+
+export const getAllInsiderTransactions = async (req, res) => {
+  try {
+    const from = (req.query.from || "").toString().trim();
+    const to = (req.query.to || "").toString().trim();
+    const data = await fetchAllInsiderTransactions({
+      from: from || undefined,
+      to: to || undefined,
+    });
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getAllInsiderTransactions controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch insider transactions from PSX." });
   }
 };

@@ -240,3 +240,20 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
     throw new Error("Failed to fetch upcoming payouts");
   }
 }
+
+export async function fetchAllInsiderTransactions({ from, to }) {
+  try {
+    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/insider-transactions";
+
+    const params = new URLSearchParams();
+
+    if (from) params.set("from", String(from));
+    if (to) params.set("to", String(to));
+
+    const response = await axios.get(`${url}?${params.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all insider transactions:", error.message);
+    throw new Error("Failed to fetch insider transactions");
+  }
+}

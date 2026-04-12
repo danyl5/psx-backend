@@ -8,6 +8,7 @@ import {
   getNotifications,
   getStockInsiderTransactions,
   getAllUpcomingPayouts,
+  getAllInsiderTransactions,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -26,6 +27,9 @@ router.get("/announcements/:symbol", getStockAnnouncements);
 
 // GET /api/psx/payouts?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/payouts", getAllUpcomingPayouts);
+
+// GET /api/psx/insider-transactions?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+router.get("/insider-transactions", getAllInsiderTransactions);
 
 router.get("/insider-transactions/:symbol", getStockInsiderTransactions);
 
