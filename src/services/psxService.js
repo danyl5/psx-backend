@@ -19,7 +19,9 @@ export async function fetchStockPriceFromPSX(symbol) {
     const changeValueText = $(".change__value").last().text().trim();
     const changePercentageText = $(".change__percent").text().trim();
 
-    const price = String(Number(priceText.replace(/Rs\.?\s*/i, "")));
+    const cleanedPrice = priceText.replace(/Rs\.?\s*/i, "").replace(/,/g, "");
+
+    const price = Number(cleanedPrice);
 
     const changeValue = changeValueText;
     const changePercentage = changePercentageText;
@@ -243,7 +245,8 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
 
 export async function fetchAllInsiderTransactions({ from, to }) {
   try {
-    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/insider-transactions";
+    const url =
+      "https://beta-restapi.sarmaaya.pk/api/announcements/insider-transactions";
 
     const params = new URLSearchParams();
 
