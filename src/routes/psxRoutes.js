@@ -9,6 +9,7 @@ import {
   getStockInsiderTransactions,
   getAllUpcomingPayouts,
   getAllInsiderTransactions,
+  getBulkNotifications,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -35,6 +36,7 @@ router.get("/insider-transactions/:symbol", getStockInsiderTransactions);
 
 router.get("/shariah-stocks", getAllShariahStocks);
 
+router.post("/notifications", getBulkNotifications);
 router.get("/notifications/:symbol", getNotifications);
 
 

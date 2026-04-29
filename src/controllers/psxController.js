@@ -6,7 +6,10 @@ import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
 import { fetchAllInsiderTransactions } from "../services/psxService.js";
-import { getStockNotifications } from "../services/notificationsService.js";
+import {
+  getMultipleStockNotifications,
+  getStockNotifications,
+} from "../services/notificationsService.js";
 
 // Simple delay helper for retry logic
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -187,6 +190,27 @@ export const getNotifications = async (req, res) => {
   const result = await getStockNotifications(symbol);
 
   res.json(result);
+};
+
+export const getBulkNotifications = async (req, res) => {
+  try {
+    const symbolsInput = req.body?.symbols;
+
+    if (!Array.isArray(symbolsInput) || symbolsInput.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "symbols must be a non-empty array." });
+    }
+
+    const result = await getMultipleStockNotifications(symbolsInput);
+
+    return res.json(result);
+  } catch (error) {
+    console.error("Error in getBulkNotifications controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch notifications." });
+  }
 };
 
 export const getAllShariahStocks = async (req, res) => {
