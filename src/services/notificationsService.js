@@ -20,7 +20,7 @@ const buildNotificationsForSymbol = async (symbol, { today, startDate }) => {
 
   const dividends = dividendRes?.response?.payoutHistory || [];
   const dividendNotifications = dividends
-    .filter((d) => d.announcementDate >= today)
+    .filter((d) => d.announcementDate > today)
     .map((d) => ({
       type: "DIVIDEND",
       symbol: d.symbol || symbol,
