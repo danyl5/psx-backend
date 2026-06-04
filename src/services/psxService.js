@@ -260,3 +260,15 @@ export async function fetchAllInsiderTransactions({ from, to }) {
     throw new Error("Failed to fetch insider transactions");
   }
 }
+
+export async function fetchStockPriceHistoryFromPSX(symbol, days) {
+  try {
+    const url = `https://beta-restapi.sarmaaya.pk/api/stocks/price-history/${symbol}?days=${days}`;
+
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching stock price history:", error.message);
+    throw new Error("Failed to fetch stock price history");
+  }
+}

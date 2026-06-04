@@ -6,6 +6,7 @@ import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
 import { fetchAllInsiderTransactions } from "../services/psxService.js";
+import { fetchStockPriceHistoryFromPSX } from "../services/psxService.js";
 import {
   getMultipleStockNotifications,
   getStockNotifications,
@@ -207,9 +208,7 @@ export const getBulkNotifications = async (req, res) => {
     return res.json(result);
   } catch (error) {
     console.error("Error in getBulkNotifications controller:", error);
-    return res
-      .status(500)
-      .json({ message: "Failed to fetch notifications." });
+    return res.status(500).json({ message: "Failed to fetch notifications." });
   }
 };
 
@@ -259,5 +258,33 @@ export const getAllInsiderTransactions = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch insider transactions from PSX." });
+  }
+};
+
+export const getStockPriceHistory = async (req, res) => {
+  try {
+    const symbol = (req.params.symbol || req.query.symbol || "")
+      .toString()
+      .trim()
+      .toUpperCase();
+
+    if (!symbol) {
+      return res.status(400).json({ message: "Symbol is required." });
+    }
+
+    const days = (req.query.days || "").toString().trim();
+
+    if (!days) {
+      return res.status(400).json({ message: "Days are required." });
+    }
+
+    const data = await fetchStockPriceHistoryFromPSX(symbol, days);
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getStockPriceHistory controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch stock price history from PSX." });
   }
 };

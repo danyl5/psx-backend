@@ -10,6 +10,7 @@ import {
   getAllUpcomingPayouts,
   getAllInsiderTransactions,
   getBulkNotifications,
+  getStockPriceHistory,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -38,6 +39,9 @@ router.get("/shariah-stocks", getAllShariahStocks);
 
 router.post("/notifications", getBulkNotifications);
 router.get("/notifications/:symbol", getNotifications);
+
+// GET /api/psx/price-history/:symbol?days=30
+router.get("/price-history/:symbol", getStockPriceHistory);
 
 
 
