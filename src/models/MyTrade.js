@@ -36,6 +36,10 @@ const myTradeSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+    holdingStartDate: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

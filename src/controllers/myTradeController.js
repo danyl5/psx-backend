@@ -8,6 +8,15 @@ const sanitizeNumber = (value) => {
   return num;
 };
 
+const sanitizeDate = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
 // 0: active, 1: profit, 2: loss, 3: no P/L
 const getStatusOrder = (row) => {
   const quantity = Number(row.quantity) || 0;
@@ -52,6 +61,7 @@ export const addMyTrade = async (req, res) => {
       buyPrice = 0,
       sellPrice = 0,
       dividend = 0,
+      holdingStartDate = null,
     } = req.body;
 
     if (!script.toString().trim()) {
@@ -67,6 +77,7 @@ export const addMyTrade = async (req, res) => {
       buyPrice: sanitizeNumber(buyPrice),
       sellPrice: sanitizeNumber(sellPrice),
       dividend: sanitizeNumber(dividend),
+      holdingStartDate: sanitizeDate(holdingStartDate),
     });
 
     return res.status(201).json({ row });
@@ -80,7 +91,8 @@ export const addMyTrade = async (req, res) => {
 export const updateMyTrade = async (req, res) => {
   try {
     const { id } = req.params;
-    const { script, quantity, buyPrice, sellPrice, dividend } = req.body;
+    const { script, quantity, buyPrice, sellPrice, dividend, holdingStartDate } =
+      req.body;
 
     const row = await MyTrade.findOne({ _id: id, user: req.user._id });
     if (!row) {
@@ -108,6 +120,10 @@ export const updateMyTrade = async (req, res) => {
 
     if (dividend !== undefined) {
       row.dividend = sanitizeNumber(dividend);
+    }
+
+    if (holdingStartDate !== undefined) {
+      row.holdingStartDate = sanitizeDate(holdingStartDate);
     }
 
     await row.save();
