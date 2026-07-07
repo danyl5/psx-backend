@@ -1,5 +1,2238 @@
 [
     {
+        "symbol": "AKBLTFC6",
+        "name": "Askari Bank(TFC6)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BAFLTFC6",
+        "name": "Bank Al-Falah(TFC6",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BAFLTFC8",
+        "name": "Bank Alfalah(TFC8)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BAHLTFC10",
+        "name": "BANK AL HABIB LTD. (10TH ISSUE)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BAHLTFC9",
+        "name": "Bank Al-Habib(TFC9",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BIPLSC",
+        "name": "Bank IslamiSC",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BIPLSC2",
+        "name": "BankIslami Pakistan Ltd",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "BOPTFC2",
+        "name": "Bank Of Punjab(TFC",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "HBLTFC2",
+        "name": "Habib Bank(TFC2)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "HBLTFC3",
+        "name": "Habib Bank (TFC3)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "HUBPHLSC",
+        "name": "Hub Power Holding",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "JSBLTFC2",
+        "name": "JS Bank Ltd(TFC2)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "JSBLTFC3",
+        "name": "JS Bank(TFC)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "JSBLTFC4",
+        "name": "JS BANK (TFC)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "KELSC5",
+        "name": "K-Electric(Sukuk5)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "KELSC6",
+        "name": "K-Electric LtdSC6",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "KELSTSC",
+        "name": "KEL Short Term Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "KFGB1",
+        "name": "Kashf Foundation Gender Bond",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "LOADSSTSC",
+        "name": "Loads Limited Short Term Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "MMBLTFC",
+        "name": "Mobilink Microfinance Bank TFC",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "MUGHALSC",
+        "name": "Mughal Steel Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "MUGHALSTSC",
+        "name": "Mughal Iron Short Term Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS100627",
+        "name": "1 Yr Dis GoP Hybrid Sukuk Mat-10-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS130527",
+        "name": "1 Yr DIS GoP Hybrid Sukuk Mat-13-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS150427",
+        "name": "1 Yr DIS GoP Hybrid Sukuk Mat-15-Apr-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS200527",
+        "name": "1 Yr Dis GoP Hybrid Sukuk Mat -20-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS230627",
+        "name": "1 Yr Dis GoP Hybrid Sukuk Mat-23-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GHS290427",
+        "name": "1 Yr DIS GoP Hybrid Sukuk Mat-29-Apr-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS080227",
+        "name": "1 Year GIS Discounted Mat - 08-Feb-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS101226",
+        "name": "1 Year GIS Discounted Mat- 10-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS131126",
+        "name": "1 Year GIS Discounted Mat 13-11-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS141026",
+        "name": "1 Year GIS Discounted Mat - 14-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS200826",
+        "name": "1 Year GIS Discounted Mat.20-08-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS210127",
+        "name": "1 Year GIS Discounted Mat - 21-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS230726",
+        "name": "1 Year GIS Discounted Mat. 23-07-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS250327",
+        "name": "1 Year GIS Discounted Mat - 25-Mar-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P01GIS290926",
+        "name": "1 Year GIS Discounted Mat. 29-Sep-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PFL031026",
+        "name": "2 Year PIB Floater - Mat.03-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PFL090127",
+        "name": "2 Year PIB Floater - Mat.09-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PFL121226",
+        "name": "2 Year PIB Floater - Mat.12-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PFL210925",
+        "name": "P02PFL210925",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PIB150128",
+        "name": "2-Year PIB Fixed Mat. Date 15-Jan-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PIB160127",
+        "name": "2-Year PIB Fixed Mat. Date 16-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PIB170727",
+        "name": "2-Year PIB Fixed Mat.Date 17-07-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P02PIB200926",
+        "name": "2-Year PIB Fixed Mat.Date 20-09-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR020528",
+        "name": "3 Year Fixed Rental Rate Mat.02-05-2028",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR070328",
+        "name": "3 Year Fixed Rental Rate Mat.07-03-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR090128",
+        "name": "3 Year Fixed Rental Rate Mat.09-01-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR100527",
+        "name": "3 Year Fixed Rental Rate - Mat.10-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR141128",
+        "name": "3 Year Fixed Rental Rate Mat 14-11-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR180629",
+        "name": "3 Yr FRR GoP Hybrid Sukuk Mat- 18-Jun-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR180927",
+        "name": "3 Year Fixed Rental Rate Mat. 18-09-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR211027",
+        "name": "3 Year Fixed Rental Rate Mat.21-10-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR220129",
+        "name": "3 Year Fixed Rental Rate Mat - 22-Jan-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR240127",
+        "name": "3 Year Fixed Rental Rate-Mat. 24-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR280627",
+        "name": "3 Year Fixed Rental Rate - Mat.28-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR300528",
+        "name": "3 Year Fixed Rental Rate Mat. 30-05-2028",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03FRR300928",
+        "name": "3 Year Fixed Rental Rate Mat.30-09-2028",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03GVR190528",
+        "name": "3 Yr Green Variable Rate - Mat.19-05-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PFL070227",
+        "name": "3 Year PIB Floater - Mat.07-Feb-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PFL090226",
+        "name": "P03PFL090226",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PFL191026",
+        "name": "P03PFL191026",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PFL210926",
+        "name": "P03PFL210926",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB040726",
+        "name": "3 Year Fixed PIB - Mat. 04-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB150129",
+        "name": "3-Year PIB Fixed Mat. Date 15-Jan-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB150227",
+        "name": "3 Years Fixed PIB Mat.15-Feb-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB160128",
+        "name": "3 Year Fixed PIB - Mat.16-Jan-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB170728",
+        "name": "3-Year PIB Fixed Mat.Date 17-07-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB190529",
+        "name": "3 Year PIB Fixed -Mat 19-May-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03PIB200927",
+        "name": "3 Years Fixed PIB - Mat.20-Sep-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03TB080126",
+        "name": "3 Month Treausy Bills Mat - 08-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03TB111225",
+        "name": "3-Month Treasury Bills Mat. Date 11-Dec-",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR090128",
+        "name": "3 Yr Variable Rental Rate -Mat.09-01-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR100527",
+        "name": "3 Yr Variable Rental Rate -Mat.10-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR180927",
+        "name": "3 Yr Variable Rental Rate Mat 18-09-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR211027",
+        "name": "3 Yr Variable Rental Rate -Mat.21-Oct-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR240127",
+        "name": "3 Yr Variable Rental Rate -Mat.24-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P03VRR280627",
+        "name": "3 Yr Variable Rental Rate -Mat.28-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR070330",
+        "name": "5 Yr Fixed Rental Rate - Mat. 07-Mar-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR090130",
+        "name": "5 Yr Fixed Rental Rate - Mat. 09-Jan-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR100529",
+        "name": "5 Yr Fixed Rental Rate -Mat. 10-May-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR141130",
+        "name": "5 Year Fixed Rental Rate Mat 14-11-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR180631",
+        "name": "5 Yr FRR GoP Hybrid Sukuk Mat- 18-Jun-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR180929",
+        "name": "5 Yr Fixed Rental Rate Mat. 18-09-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR211029",
+        "name": "5 Yr Fixed Rental Rate - Mat. 21-Oct-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR220131",
+        "name": "5 Year Fixed Rental Rate Mat - 22-Jan-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR240129",
+        "name": "5 Yr Fixed Rental Rate -Mat. 24-Jan-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR280629",
+        "name": "5 Yr Fixed Rental Rate - Mat.28-Jun-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR300530",
+        "name": "5 Yr Fixed Rental Rate - Mat. 30-May-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05FRR300930",
+        "name": "5 Year Fixed Rental Rate Mat.30-09-2030",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05GIS091225",
+        "name": "P05GIS091225",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL031029",
+        "name": "5 Year PIB Floater - Mat.03-Oct-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL050929",
+        "name": "5 Year PIB Floater - Mat.05-Sep-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL060428",
+        "name": "P05PFL060428",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL060526",
+        "name": "5 Year PIB Floater - Mat.06-May-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL070229",
+        "name": "5 Year PIB Floater - Mat.07-Feb-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL090130",
+        "name": "5 Year PIB Floater - Mat.09-Jan-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL100828",
+        "name": "5 Year PIB Floater - Mat.10-Aug-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL121229",
+        "name": "5 Year PIB Floater - Mat.12-Dec-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL141129",
+        "name": "5 Year PIB Floater - Mat.14-Nov-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL141228",
+        "name": "5 Year PIB Floater - Mat.14-Dec-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL161127",
+        "name": "P05PFL161127",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL170430",
+        "name": "5 Year PIB Floater - Mat.17-Apr-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL171127",
+        "name": "5 Year PIB Floater - Mat.17-Nov-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL180429",
+        "name": "5 Year PIB Floater - Mat.18-Apr-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL191028",
+        "name": "P05PFL191028",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL210928",
+        "name": "P05PFL210928",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL221025",
+        "name": "5 Year PIB Floater - Mat.22-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PFL270629",
+        "name": "5 Year PIB Floater - Mat.27-Jun-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB131027",
+        "name": "P05PIB131027",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB150131",
+        "name": "5-Year PIB Fixed Mat. Date 15-Jan-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB151025",
+        "name": "P05PIB151025",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB160130",
+        "name": "5 Years Fixed PIB - Mat.16-Jan-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB170129",
+        "name": "5 Years Fixed PIB - Mat.17-Jan-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB170730",
+        "name": "5-Year PIB Fixed Mat. Date 17-07-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB190531",
+        "name": "5 Year PIB Fixed - Mat 19-May-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB200929",
+        "name": "5 Years Fixed PIB - Mat. 20-Sep-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05PIB290427",
+        "name": "P05PIB290427",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR020530",
+        "name": "5 Yr Variable Rental Rate -Mat.02-05-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR090130",
+        "name": "5 Yr Variable Rental Rate -Mat.09-01-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR100529",
+        "name": "5 Yr Variable Rental Rate -Mat.10-May-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR180929",
+        "name": "5 Yr Variable Rental Rate - Mat.18-09-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR211029",
+        "name": "5 Yr Variable Rental Rate -Mat.21-Oct-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR240129",
+        "name": "5 Yr Variable Rental Rate -Mat.24-Jan-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR280629",
+        "name": "5 Yr Variable Rental Rate -Mat.28-06-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P05VRR300530",
+        "name": "5 Yr Variable Rental Rate - Mat.30-05-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRR090135",
+        "name": "10 Year Fixed Rental Rate Mat. 09-01-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRR180934",
+        "name": "10 Year Fixed Rental Rate Mat. 18-09-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRR211034",
+        "name": "10 Year Fixed Rental Rate Mat. 21-10-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRZ141135",
+        "name": "10 Year FRR Zero Coupon Mat 14-11-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRZ151035",
+        "name": "10 YEAR FRR ZERO COUPON MAT. 15-OCT-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRZ220136",
+        "name": "10 Year FRR Zero Coupon Mat - 22-Jan-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRZ240735",
+        "name": "10 Year FRR Zero Coupon Mat.24-Jul-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10FRZ300535",
+        "name": "10 Year FRR  Zero Coupon Mat.30-May-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFA221030",
+        "name": "10 Year PIB Floater - Mat.22-Oct-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL031034",
+        "name": "10 Year PIB Floater - Mat.03-Oct-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL041131",
+        "name": "10 Year PIB Floater - Mat.14-Nov-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL050934",
+        "name": "10 Year PIB Floater - Mat.05-Sep-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL070234",
+        "name": "10 Year PIB Floater - Mat.07-Feb-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL080136",
+        "name": "10 Year PIB Floater Mat - 08-Jan-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL090135",
+        "name": "10 Year PIB Floater - Mat.09-Jan-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL090828",
+        "name": "10 Year PIB Floater - Mat.09-Aug-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL100735",
+        "name": "10-Year PIB Floating Rate Mat.Date100735",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL121234",
+        "name": "10 Year PIB Floater - Mat.12-Dec-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL141134",
+        "name": "10 Year PIB Floater - Mat.14-Nov-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL141233",
+        "name": "10 Year PIB Floater - Mat.14-Dec-33",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL170435",
+        "name": "10 Year PIB Floater - Mat.17-Apr-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL180429",
+        "name": "10 Year PIB Floater - Mat.18-Apr-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL180434",
+        "name": "10 Year PIB Floater - Mat.18-Apr-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL180630",
+        "name": "10 Year PIB Floater - Mat.18-Jun-30",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL210229",
+        "name": "10 Year PIB Floater - Mat.21-Feb-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL210329",
+        "name": "10 Year PIB Floater - Mat.21-Mar-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL220829",
+        "name": "P10PFL220829",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL250729",
+        "name": "10 Year PIB Floater - Mat.25-Jul-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL270629",
+        "name": "10 Year PIB Floater - Mat.27-Jun-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL280628",
+        "name": "10 Year PIB Floater - Mat.28-Jun-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL290535",
+        "name": "10 Year PIB Floater - Mat.29-May-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL300529",
+        "name": "10 Year PIB Floater - Mat.30-May-29",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PFL310528",
+        "name": "10 Year PIB Floater - Mat.31-May-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB101133",
+        "name": "10 Years Fixed PIB - Mat.10-Nov-33",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB101230",
+        "name": "P10PIB101230",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB120728",
+        "name": "P10PIB120728",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB150136",
+        "name": "10-Year PIB Fixed Mat. Date 15-Jan-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB160135",
+        "name": "10 Years Fixed PIB - Mat.16-Jan-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB170735",
+        "name": "10-Year PIB Fixed Mat. Date 17-07-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB190536",
+        "name": "10 Year PIB Fixed Mat - 19-May-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB190929",
+        "name": "P10PIB190929",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB200934",
+        "name": "10 Years Fixed PIB - Mat. 20-Sep-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB291226",
+        "name": "10 Years Fixed PIB - Mat.29-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10PIB301132",
+        "name": "10 Year Fixed PIB - Mat.30-Nov-32",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR020535",
+        "name": "10 Yr Variable Rental Rate -Mat.02-05-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR070335",
+        "name": "10 Yr Variable Rental Rate -Mat.07-03-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR090135",
+        "name": "10 Yr Variable Rental Rate -Mat.09-01-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR111235",
+        "name": "10 Yr Variable Rental Rate Mat 11-Dec-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR160436",
+        "name": "10 Yr VRR GoP Hybrid Sukuk Mat-16-Apr-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR180934",
+        "name": "10 Yr Variable Rental Rate -Mat.18-09-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR211034",
+        "name": "10 Yr Variable Rental Rate -Mat.21-10-34",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR220136",
+        "name": "10 Yr Variable Rental Rate Mat-22-Jan-36",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR300535",
+        "name": "10 Yr Variable Rental Rate-Mat.30-05-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P10VRR300935",
+        "name": "10Year Variable Rental Rate Mat.30-09-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P15PIB160435",
+        "name": "15 Year PIB Fixed - Mat.16-Apr-35",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P15PIB190640",
+        "name": "15 Year PIB Fixed - Mat.19-June-40",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P20PIB180831",
+        "name": "20 Year PIB Fixed - Mat.18-Aug-31",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P20PIB190939",
+        "name": "20 Year PIB Fixed - Mat.19-Sep-39",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P20PIB300828",
+        "name": "20 Year PIB Fixed - Mat.30-Aug-28",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "P20PIB311026",
+        "name": "20 Year PIB Fixed - Mat.31-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PFSLTFC",
+        "name": "Parwaz Green Bond TFC",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB020426",
+        "name": "1 Month Treasury Bill Mat - 02-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB021025",
+        "name": "1 Month Treasury Bills -02-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB050326",
+        "name": "1 Month Treasury Bill Mat - 05-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB060226",
+        "name": "1 Month Treasury Bills Mat - 06-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB080126",
+        "name": "01 Month Treasury Bills Mat - 08-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB090726",
+        "name": "1 Month Treasury Bill Mat 09-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB110626",
+        "name": "1 Month Treasury Bill Mat - 11-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB111225",
+        "name": "1 Month Treasury Bills - 11-Dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB140526",
+        "name": "1-Month Treasury Bills - 14-May-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB170326",
+        "name": "1 Month Treasury Bills Mat - 17-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB180925",
+        "name": "1 Month Treasury Bills -18-Sep-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB190226",
+        "name": "1 Month Treasury Bills - 19-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB220126",
+        "name": "01 Month Treasury Bills - 22-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB230726",
+        "name": "1 Month Treasury Bill - Mat - 23-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB240626",
+        "name": "1 Month Treasury Bill Mat - 24-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB261225",
+        "name": "01 Month Treasury Bills Mat 26-dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB271125",
+        "name": "1 Month Treasury Bills Mat - 27-11-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB300426",
+        "name": "1-Month Treasury Bills Mat - 30-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK01TB301025",
+        "name": "1-Month Treasury Bill Mat.Date 30-10-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB020426",
+        "name": "3 Month Treasury Bills Mat - 02-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB021025",
+        "name": "3 Month Treasury Bills -02-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB030926",
+        "name": "3 Month Treasury Bill Mat - 03-Sep-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB050326",
+        "name": "03 Month Treasury Bills Mat - 05-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB060226",
+        "name": "3 Month Treasury Bills Mat - 06-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB060826",
+        "name": "3 Month Treasury Bill Mat - 06-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB080126",
+        "name": "3 Month Treasury Bills Mat - 08-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB090726",
+        "name": "3-Month Treasury Bills - 9-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB110626",
+        "name": "3 Months Treasury Bills Mat - 11-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB131125",
+        "name": "3 Month Treasury Bills -13-Nov-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB140526",
+        "name": "3 Month Treasury Bills Mat - 14-May-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB160426",
+        "name": "3 Month Treasury Bills - 16-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB161025",
+        "name": "3 Month Treasury Bill - 16-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB170326",
+        "name": "03 Month Treasury Bills Mat 17-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB170926",
+        "name": "3 MOnth Treasury Bill - Mat - 17-Sep-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB180925",
+        "name": "3 Month Treasury Bills -18-Sep-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB190226",
+        "name": "03 Month Treasury Bills Mat -19-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB200826",
+        "name": "3 Month Treasury Bill Mat - 20-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB220126",
+        "name": "3 Month treasury Bills Mat- 22-01-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB230726",
+        "name": "3 Month Treasury Bills Mat - 23-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB240626",
+        "name": "3-Month Treasury Bills Mat 24-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB261225",
+        "name": "3-Month Treasury Bill Mat - 26-Dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB271125",
+        "name": "3 Month Treasury Bills -27-Nov-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB300426",
+        "name": "3 Month Treausry Bills Mat - 30-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK03TB301025",
+        "name": "3 Month Treasury Bills -30-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB011026",
+        "name": "6-Month Treasury Bills Mat 1-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB020426",
+        "name": "6-Month Treasury Bill Mat-Date 02-04-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB021025",
+        "name": "6 Month Treasury Bills - 02-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB030926",
+        "name": "6 Month Treasury Bills mat - 03-Sep-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB050326",
+        "name": "6 Month Treasury Bills Mat-05-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB060226",
+        "name": "6 Month Treasury Bills Mat -06-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB060826",
+        "name": "6 Months Treasury Bills Mat - 06-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB080126",
+        "name": "6 Month Treasury Bills Mat -08-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB090726",
+        "name": "6 Month Treasuy Bills Mat - 09-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB101226",
+        "name": "6 Month Treasury Bill Mat - 10-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB110626",
+        "name": "06 Month Treasury Bills Mat - 11-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB111225",
+        "name": "6 Month Treasury Bills -11-Dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB121126",
+        "name": "6 Month Treasury Bill Mat - 12-Nov-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB131125",
+        "name": "6 Month Treasury Bills -13-Nov-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB140526",
+        "name": "6 Month Treasury Bills Mat - 14-May-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB151026",
+        "name": "6-Month Treasury Bills - 15-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB160426",
+        "name": "6 month Treasury Bills Mat- 16-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB161025",
+        "name": "PK06TB161025",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB180925",
+        "name": "PK06TB180925",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB190226",
+        "name": "6 Month Treasury Bills Mat -19-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB190326",
+        "name": "6-Month Treasury Bill Mat - 19-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB200826",
+        "name": "6 Month Treasury Bills Mat - 20-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB220126",
+        "name": "6 Month Treasury Bills Mat- 22-Jan-2026",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB230726",
+        "name": "6 Month Treasury Bills - 23-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB240626",
+        "name": "06 Month Treasury Bills Mat 24-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB241226",
+        "name": "6 Month Treasury Bill - Mat - 24-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB261126",
+        "name": "6 Month Treasury Bill Mat - 26-Nov-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB261225",
+        "name": "6 Month Treasury Bills Mat -26-Dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB271125",
+        "name": "6 Month Treasury Bills -27-Nov-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB290526",
+        "name": "06 Months Treasury Bill Mat - 29-may-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB291026",
+        "name": "6 Month Treasury Bills Mat - 29-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB300426",
+        "name": "6 Month Treasury Bills mat - 30-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK06TB301025",
+        "name": "6 Month Treasury Bills -30-Oct-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB010427",
+        "name": "12-Month Treasury Bills Mat 1-Apr-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB011026",
+        "name": "12-Month Treasury Bill Mat - 01-10-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB020426",
+        "name": "12 Month Treasury Bills Mat - 02-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB021025",
+        "name": "PK12TB021025",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB030926",
+        "name": "12 Month Treasury Bills -03-Sep-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB040227",
+        "name": "12 Month Treasury Bills Mat - 04-Feb-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB040327",
+        "name": "12 Month Treasury Bills Mat - 04-Mar-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB050326",
+        "name": "12 Month Treasury Bills Mat - 05-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB060226",
+        "name": "12 Month Treasury Bills Mat - 06-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB060826",
+        "name": "12 Month Treasury Bills -06-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB070127",
+        "name": "12 Month Treasury Bills Mat - 07-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB080126",
+        "name": "12 Month Treasuy Bills Mat - 08-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB090726",
+        "name": "12 Month Treasury Bills Mat -09-Jul-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB100627",
+        "name": "12 Month Treasury Bill Mat - 10-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB101226",
+        "name": "12 Months Treasury Bills Mat - 11-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB110626",
+        "name": "12 Month Treasury Bills Mat -11-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB111225",
+        "name": "PK12TB111225",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB121126",
+        "name": "12 Month Treasury Bills Mat - 12-Nov-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB130527",
+        "name": "12 Month Treasury Bill Mat - 13-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB131125",
+        "name": "PK12TB131125",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB140526",
+        "name": "12 Month Treasury Bills Mat -14-May-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB150427",
+        "name": "12 Month Treasury Bills - 15-Apr-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB151026",
+        "name": "12 Month Treasury Bills Mat- 15-10-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB160426",
+        "name": "12 Month Treasury Bills Mat - 16-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB161025",
+        "name": "PK12TB161025",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB170326",
+        "name": "12 Month Treasury Bills Mat - 17-Mar-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB170926",
+        "name": "12-Month Treasury Bills Mat - 17-09-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB180227",
+        "name": "12-Month Treasury Bills- 18-Feb-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB190226",
+        "name": "12 Month Treasury Bills Mat - 19-Feb-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB200826",
+        "name": "12 Month Treasury Bills Mat -20-Aug-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB210127",
+        "name": "12 Month Treasury Bills - 21-Jan-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB220126",
+        "name": "12 Month Treasury Bills Mat - 22-Jan-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB230726",
+        "name": "12 Month Treasury Bills Mat - 23-July-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB240626",
+        "name": "12 Month Treasury Bills Mat -24-Jun-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB240627",
+        "name": "12 Month Treasury Bill - Mat - 24-Jun-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB241226",
+        "name": "12 Month Treasuy Bills Mat 24-Dec-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB261126",
+        "name": "12 Months Treasury Bills Mat - 26-nov-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB261225",
+        "name": "12 Month Treasury Bills Mat - 26-Dec-25",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB270527",
+        "name": "12 Month Treasury Bill Mat - 27-May-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB271125",
+        "name": "PK12TB271125",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB290427",
+        "name": "12 Month Treasury Bills Mat - 29-Apr-27",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB290526",
+        "name": "12 Month Treasury Bills Mat -29-May-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB291026",
+        "name": "12 Month Treasury Bills Mat - 29-Oct-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB300426",
+        "name": "12 Month Treasury Bills Mat- 30-Apr-26",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PK12TB301025",
+        "name": "PK12TB301025",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "PREMASC",
+        "name": "At-Tahur Sukuk Certificate",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "SBLTFC",
+        "name": "Samba Bank Ltd.(TF",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "SITCSC4",
+        "name": "Sitara Chemical Ind. Ltd Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "SNBLTFC3",
+        "name": "Soneri Bank(TFC3)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "SNBLTFC4",
+        "name": "SONERI BANK LIMITED (4TH ISSUE)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "THCCLSC",
+        "name": "Thatta Cement Company Limited - Sukuk",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "TPLPTFC2",
+        "name": "TPL Properties Limited",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "TPLSC",
+        "name": "TPL Corp Ltd.(SC)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "TPLTFC3",
+        "name": "TPLCorp(TFC3)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
+        "symbol": "UBLTFC5",
+        "name": "United Bank(TFC5)",
+        "sectorName": "BILLS AND BONDS",
+        "isETF": false,
+        "isDebt": true
+    },
+    {
         "symbol": "786",
         "name": "786 Investments Limited",
         "sectorName": "INV. BANKS / INV. COS. / SECURITIES COS.",
@@ -419,6 +2652,14 @@
         "symbol": "ARM",
         "name": "Allied Rental Modaraba",
         "sectorName": "",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
+        "symbol": "ARMG",
+        "name": "ARM Green Industries Limited",
+        "sectorName": "INV. BANKS / INV. COS. / SECURITIES COS.",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -2064,6 +4305,14 @@
         "isGEM": false
     },
     {
+        "symbol": "GCWLR",
+        "name": "Ghani Chemworld Limited Right",
+        "sectorName": "CHEMICAL",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
         "symbol": "GDL",
         "name": "Ghani Dairies Limited",
         "sectorName": "FOOD & PERSONAL CARE PRODUCTS",
@@ -2810,7 +5059,7 @@
     {
         "symbol": "IMAGE",
         "name": "Image Pakistan Limited",
-        "sectorName": "SYNTHETIC & RAYON",
+        "sectorName": "APPAREL",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -2866,7 +5115,7 @@
     {
         "symbol": "INKL",
         "name": "International Knitwear Limited",
-        "sectorName": "TEXTILE COMPOSITE",
+        "sectorName": "APPAREL",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -2985,7 +5234,7 @@
     },
     {
         "symbol": "JGICL",
-        "name": "Jubilee General Insurance Limited",
+        "name": "Jubilee General Insurance Company Ltd.",
         "sectorName": "INSURANCE",
         "isETF": false,
         "isDebt": false,
@@ -3099,6 +5348,14 @@
         "symbol": "JSML",
         "name": "Jauharabad Sugar Mills Limited",
         "sectorName": "SUGAR & ALLIED INDUSTRIES",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
+        "symbol": "JSRR",
+        "name": "JS Rental REIT",
+        "sectorName": "REAL ESTATE INVESTMENT TRUST",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -3560,6 +5817,14 @@
         "isGEM": false
     },
     {
+        "symbol": "MFFLR1",
+        "name": "Mitchells Fruit Farms Limited(Right)",
+        "sectorName": "FOOD & PERSONAL CARE PRODUCTS",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
         "symbol": "MFL",
         "name": "Matco Foods Limited",
         "sectorName": "FOOD & PERSONAL CARE PRODUCTS",
@@ -3674,7 +5939,7 @@
     {
         "symbol": "MSOT",
         "name": "Masood Textile Mills Limited",
-        "sectorName": "TEXTILE COMPOSITE",
+        "sectorName": "APPAREL",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -3682,7 +5947,7 @@
     {
         "symbol": "MSOTPS",
         "name": "Masood Textile (Pref)",
-        "sectorName": "TEXTILE COMPOSITE",
+        "sectorName": "APPAREL",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -4960,6 +7225,14 @@
         "isGEM": false
     },
     {
+        "symbol": "SHDTR1",
+        "name": "Shadab Textile Mills Limited(Right)",
+        "sectorName": "TEXTILE SPINNING",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
         "symbol": "SHEL",
         "name": "Shell Pakistan Limited",
         "sectorName": "OIL & GAS MARKETING COMPANIES",
@@ -5104,6 +7377,14 @@
         "isGEM": false
     },
     {
+        "symbol": "SLM",
+        "name": "Service Long March Tyres Limited",
+        "sectorName": "AUTOMOBILE PARTS & ACCESSORIES",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
         "symbol": "SLSO",
         "name": "Saleem Sugar Mills Limited",
         "sectorName": "SUGAR & ALLIED INDUSTRIES",
@@ -5216,6 +7497,14 @@
         "isGEM": false
     },
     {
+        "symbol": "SPAC1",
+        "name": "LSE SPAC-I Limited",
+        "sectorName": "INV. BANKS / INV. COS. / SECURITIES COS.",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
         "symbol": "SPCL",
         "name": "Saudi Pak Consultancy Company Limited",
         "sectorName": "LEASING COMPANIES",
@@ -5251,6 +7540,14 @@
         "symbol": "SPLCTFC3",
         "name": "",
         "sectorName": "LEASING COMPANIES",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
+        "symbol": "SPSL",
+        "name": "Sitara Petroleum Service Limited",
+        "sectorName": "OIL & GAS MARKETING COMPANIES",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -5362,7 +7659,7 @@
     {
         "symbol": "STYLERS",
         "name": "Stylers International Limited",
-        "sectorName": "TEXTILE COMPOSITE",
+        "sectorName": "APPAREL",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -5491,6 +7788,14 @@
         "symbol": "TCORPR1",
         "name": "Tariq Corporation (Pvt) Ltd (R)",
         "sectorName": "",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
+        "symbol": "TCORPR2",
+        "name": "Tariq Corporation Limited(Right)",
+        "sectorName": "SUGAR & ALLIED INDUSTRIES",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
@@ -5811,6 +8116,14 @@
         "symbol": "WAFI",
         "name": "Wafi Energy Pakistan Limited",
         "sectorName": "OIL & GAS MARKETING COMPANIES",
+        "isETF": false,
+        "isDebt": false,
+        "isGEM": false
+    },
+    {
+        "symbol": "WAHDAT",
+        "name": "Wahdat Poultry Farm Limited",
+        "sectorName": "FOOD & PERSONAL CARE PRODUCTS",
         "isETF": false,
         "isDebt": false,
         "isGEM": false
