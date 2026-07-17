@@ -8,6 +8,18 @@ const portfolioSchema = new mongoose.Schema(
       required: true,
       index: true
     },
+    portfolionumber: {
+      type: Number,
+      required: true,
+      min: 1,
+      default: 1,
+      index: true
+    },
+    portfolioName: {
+      type: String,
+      trim: true,
+      default: "Portfolio 1"
+    },
     script: {
       type: String,
       required: [true, "Script is required"],
