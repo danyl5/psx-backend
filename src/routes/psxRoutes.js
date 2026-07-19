@@ -8,6 +8,7 @@ import {
   getNotifications,
   getStockInsiderTransactions,
   getAllUpcomingPayouts,
+  getAllUpcomingBoardMeetings,
   getAllInsiderTransactions,
   getBulkNotifications,
   getStockPriceHistory,
@@ -29,6 +30,9 @@ router.get("/announcements/:symbol", getStockAnnouncements);
 
 // GET /api/psx/payouts?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/payouts", getAllUpcomingPayouts);
+
+// GET /api/psx/board-meetings?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+router.get("/board-meetings", getAllUpcomingBoardMeetings);
 
 // GET /api/psx/insider-transactions?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/insider-transactions", getAllInsiderTransactions);

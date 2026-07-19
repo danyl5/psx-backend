@@ -5,6 +5,7 @@ import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
+import { fetchAllUpcomingBoardMeetings } from "../services/psxService.js";
 import { fetchAllInsiderTransactions } from "../services/psxService.js";
 import { fetchStockPriceHistoryFromPSX } from "../services/psxService.js";
 import {
@@ -240,6 +241,24 @@ export const getAllUpcomingPayouts = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch upcoming payouts from PSX." });
+  }
+};
+
+export const getAllUpcomingBoardMeetings = async (req, res) => {
+  try {
+    const from = (req.query.from || "").toString().trim();
+    const to = (req.query.to || "").toString().trim();
+    const data = await fetchAllUpcomingBoardMeetings({
+      from: from || undefined,
+      to: to || undefined,
+    });
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getAllUpcomingBoardMeetings controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch upcoming board meetings from PSX." });
   }
 };
 

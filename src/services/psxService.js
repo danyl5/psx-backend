@@ -243,6 +243,24 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
   }
 }
 
+export async function fetchAllUpcomingBoardMeetings({ from, to }) {
+  try {
+    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
+
+    const params = new URLSearchParams();
+
+    if (from) params.set("from", String(from));
+    if (to) params.set("to", String(to));
+
+    const response = await axios.get(`${url}?${params.toString()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all upcoming board meetings:", error.message);
+    throw new Error("Failed to fetch upcoming board meetings");
+  }
+}
+
+
 export async function fetchAllInsiderTransactions({ from, to }) {
   try {
     const url =
