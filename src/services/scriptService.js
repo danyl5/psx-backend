@@ -2,12 +2,16 @@ import axios from "axios";
 
 export async function fetchScripts() {
   try {
-    const url =
-      "https://dps.psx.com.pk/symbols";
-    const response = await axios.get(url);
-    return response.data;
+    const response = await axios.get(
+      "https://beta-restapi.sarmaaya.pk/api/stocks/listing?limit=1000"
+    );
+
+    return response.data.response.data;
   } catch (error) {
-    console.error("Error fetching all scripts:", error.message);
+    console.error(
+      "Error fetching scripts:",
+      error.response?.data || error.message
+    );
     throw new Error("Failed to fetch scripts");
   }
 }
