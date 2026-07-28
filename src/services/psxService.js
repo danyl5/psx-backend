@@ -83,6 +83,15 @@ export async function fetchStockPriceFromPSX(symbol) {
     };
   } catch (error) {
     console.error("Error fetching PSX price for", symbol, error.message);
+    console.log({
+      message: error.message,
+      code: error.code,
+      errno: error.errno,
+      syscall: error.syscall,
+      address: error.address,
+      port: error.port,
+      status: error.response?.status,
+    });
     return { symbol, price: null };
   }
 }
