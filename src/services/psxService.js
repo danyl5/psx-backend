@@ -2,45 +2,49 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import compactNumberFormat from "../utils/numberFormatting.js";
 
+const psxAgent = new https.Agent({ keepAlive: true, maxSockets: 5 });
+ 
 export async function fetchStockPriceFromPSX(symbol) {
   try {
     const url = `https://dps.psx.com.pk/company/${symbol}`;
-
+ 
     const response = await axios.get(url, {
+      timeout: 10000, // fail fast instead of hanging until the socket is killed
+      httpsAgent: psxAgent,
       headers: {
         "User-Agent": "Mozilla/5.0",
       },
     });
-
+ 
     const $ = cheerio.load(response.data);
-
+ 
     // Price selector based on PSX layout
     const priceText = $(".quote__close").first().text().trim();
     const changeValueText = $(".change__value").last().text().trim();
     const changePercentageText = $(".change__percent").text().trim();
-
+ 
     const cleanedPrice = priceText.replace(/Rs\.?\s*/i, "").replace(/,/g, "");
-
+ 
     const price = Number(cleanedPrice);
-
+ 
     const changeValue = changeValueText;
     const changePercentage = changePercentageText;
-
+ 
     // select REG market panel
     const regPanel = $('.tabs__panel[data-name="REG"]');
-
+ 
     // ---- CODE (Open, High, Low, Volume) ----
     let open = null,
       high = null,
       low = null,
       volume = null,
       ldcp = null;
-
+ 
     regPanel.find(".stats.stats--noborder .stats_item").each((_, el) => {
       const label = $(el).find(".stats_label").text().trim().toLowerCase();
       const valueText = $(el).find(".stats_value").text().trim();
       const value = valueText;
-
+ 
       if (label === "open") open = value;
       if (label === "high") high = value;
       if (label === "low") low = value;
@@ -48,28 +52,28 @@ export async function fetchStockPriceFromPSX(symbol) {
       if (label === "ldcp") ldcp = value;
     });
     // --------------------------------------------
-
+ 
     // ---- Fetch LDCP ----
     const ldcpEl = regPanel
       .find(".stats .stats_item .stats_label")
       .filter((_, el) => $(el).text().trim() === "LDCP")
       .closest(".stats_item")
       .find(".stats_value");
-
+ 
     ldcp = ldcpEl.text().trim();
-
+ 
     if (Number.isNaN(price)) {
       return { symbol, price: null };
     }
-
+ 
     if (Number.isNaN(changeValue)) {
       return { symbol, changeValue: null };
     }
-
+ 
     if (Number.isNaN(changePercentage)) {
       return { symbol, changePercentage: null };
     }
-
+ 
     return {
       symbol,
       price,
