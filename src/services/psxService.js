@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import compactNumberFormat from "../utils/numberFormatting.js";
+import https from "https";
 
 const psxAgent = new https.Agent({ keepAlive: true, maxSockets: 5 });
  
