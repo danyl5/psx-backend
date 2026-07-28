@@ -2,10 +2,10 @@ import { fetchScripts } from "../services/scriptService.js";
 
 export const getScripts = async (req, res) => {
   try {
-    const { q = "", limit = "5000" } = req.query;
+    const { q = "", limit = "1000" } = req.query;
     const data = await fetchScripts();
     const query = q.toString().trim().toUpperCase();
-    const maxLimit = Math.min(Math.max(Number.parseInt(limit, 10) || 5000, 1), 5000);
+    const maxLimit = Math.min(Math.max(Number.parseInt(limit, 10) || 1000, 1), 1000);
 
     // Keep only non-debt scripts
     let scripts = (Array.isArray(data) ? data : []).filter(
