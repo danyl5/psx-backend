@@ -17,8 +17,23 @@ const sanitizeDate = (value) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
+const getTradeStatus = (buyPrice, sellPrice) => {
+  const b = Number(buyPrice) || 0;
+  const s = Number(sellPrice) || 0;
+
+  if (s === 0) return "active";
+  if (s > b) return "profit";
+  if (s < b) return "loss";
+  return "no-pl";
+};
+
 // 0: active, 1: profit, 2: loss, 3: no P/L
 const getStatusOrder = (row) => {
+  if (row.status === "active") return 0;
+  if (row.status === "profit") return 1;
+  if (row.status === "loss") return 2;
+  if (row.status === "no-pl") return 3;
+
   const quantity = Number(row.quantity) || 0;
   const buyPrice = Number(row.buyPrice) || 0;
   const sellPrice = Number(row.sellPrice) || 0;
@@ -70,12 +85,16 @@ export const addMyTrade = async (req, res) => {
 
     const normalizedScript = script.toString().trim().toUpperCase();
 
+    const sanitizedBuyPrice = sanitizeNumber(buyPrice);
+    const sanitizedSellPrice = sanitizeNumber(sellPrice);
+
     const row = await MyTrade.create({
       user: req.user._id,
       script: normalizedScript,
       quantity: sanitizeNumber(quantity),
-      buyPrice: sanitizeNumber(buyPrice),
-      sellPrice: sanitizeNumber(sellPrice),
+      buyPrice: sanitizedBuyPrice,
+      sellPrice: sanitizedSellPrice,
+      status: getTradeStatus(sanitizedBuyPrice, sanitizedSellPrice),
       dividend: sanitizeNumber(dividend),
       holdingStartDate: sanitizeDate(holdingStartDate),
     });
@@ -126,7 +145,13 @@ export const updateMyTrade = async (req, res) => {
       row.holdingStartDate = sanitizeDate(holdingStartDate);
     }
 
-    await row.save();
+    row.status = getTradeStatus(row.buyPrice, row.sellPrice);
+
+    const preserveTimestamp =
+      row.sellPrice > 0 &&
+      (row.status === "profit" || row.status === "loss");
+
+    await row.save(preserveTimestamp ? { timestamps: false } : undefined);
     return res.status(200).json({ row });
   } catch (error) {
     return res

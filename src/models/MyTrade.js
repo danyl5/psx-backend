@@ -31,6 +31,12 @@ const myTradeSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
+    status: {
+      type: String,
+      enum: ["active", "profit", "loss", "no-pl"],
+      default: "active",
+      required: true,
+    },
     dividend: {
       type: Number,
       min: 0,
