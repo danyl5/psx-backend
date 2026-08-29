@@ -1,6 +1,7 @@
 import Portfolio from "../models/Portfolio.js";
 import PortfolioTab from "../models/PortfolioTab.js";
 import Script from "../models/Script.js";
+import { getDividendTotalsByScript } from "./dividendController.js";
 
 const sanitizeNumber = (value) => {
   const number = Number(value);
@@ -9,6 +10,8 @@ const sanitizeNumber = (value) => {
   }
   return number;
 };
+
+const roundToTwoDecimals = (value) => Math.round((sanitizeNumber(value) + Number.EPSILON) * 100) / 100;
 
 const parsePortfolioNumber = (value, fallback = 1) => {
   const parsed = Number(value);
@@ -66,9 +69,68 @@ const normalizePortfolioRows = (rows) =>
   rows.map((row) => ({
     ...row,
     portfolionumber: row.portfolionumber ?? 1,
+    avgPrice: roundToTwoDecimals(row.avgPrice),
     dividendTotal: row.dividendTotal ?? row.dividend ?? 0,
     dividendAfterTax: row.dividendAfterTax ?? row.dividendTotal ?? row.dividend ?? 0
   }));
+
+export const applyPurchaseToPortfolio = async (userId, { script, quantity, price, portfolionumber }) => {
+  const normalizedScript = (script || "").trim().toUpperCase();
+  const buyQty = Math.floor(sanitizeNumber(quantity));
+  const buyPrice = sanitizeNumber(price);
+  const parsedPortfolioNumber = Number(portfolionumber);
+
+  if (!normalizedScript || buyQty <= 0) {
+    return null;
+  }
+
+  if (!Number.isFinite(parsedPortfolioNumber) || parsedPortfolioNumber < 1) {
+    const error = new Error("Portfolio is required");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const tabs = await ensureDefaultPortfolioTab(userId);
+  const normalizedPortfolioNumber = parsePortfolioNumber(parsedPortfolioNumber);
+  const portfolioTab = tabs.find((tab) => tab.portfolionumber === normalizedPortfolioNumber);
+  if (!portfolioTab) {
+    const error = new Error("Portfolio tab not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const existing = await Portfolio.findOne({
+    ...getPortfolioRowFilter(userId, normalizedPortfolioNumber),
+    script: normalizedScript
+  }).sort({ createdAt: 1 });
+
+  if (existing) {
+    const existingQty = Math.floor(sanitizeNumber(existing.quantity));
+    const existingAvg = sanitizeNumber(existing.avgPrice);
+    const totalShares = existingQty + buyQty;
+    const totalCost = existingQty * existingAvg + buyQty * buyPrice;
+    existing.quantity = totalShares;
+    existing.avgPrice = totalShares > 0 ? roundToTwoDecimals(totalCost / totalShares) : 0;
+    await existing.save();
+    return existing;
+  }
+
+  const matchedScript = await Script.findOne({ symbol: normalizedScript }).select("sectorName -_id").lean();
+  const maxOrderRow = await Portfolio.findOne(getPortfolioRowFilter(userId, normalizedPortfolioNumber))
+    .sort({ orderNumber: -1 })
+    .select("orderNumber");
+
+  return Portfolio.create({
+    user: userId,
+    portfolionumber: normalizedPortfolioNumber,
+    portfolioName: portfolioTab.name,
+    script: normalizedScript,
+    sector: matchedScript?.sectorName || "",
+    quantity: buyQty,
+    avgPrice: roundToTwoDecimals(buyPrice),
+    orderNumber: (maxOrderRow?.orderNumber || 0) + 1
+  });
+};
 
 export const getPortfolioTabs = async (req, res) => {
   try {
@@ -165,15 +227,33 @@ export const getPortfolioRows = async (req, res) => {
       .sort({ orderNumber: 1, createdAt: 1 })
       .lean();
 
-    const symbolsMissingSector = [...new Set(rows.filter((row) => !row.sector && row.script).map((row) => row.script))];
+    const dividendTotalsByScript = await getDividendTotalsByScript(
+      req.user._id,
+      portfolionumber
+    );
+    const rowsWithDividends = rows.map((row) => {
+      const totals = dividendTotalsByScript.get(
+        (row.script || "").toString().trim().toUpperCase()
+      );
+      if (!totals) {
+        return row;
+      }
+      return {
+        ...row,
+        dividendTotal: totals.totalDividend,
+        dividendAfterTax: totals.totalAfterTax
+      };
+    });
+
+    const symbolsMissingSector = [...new Set(rowsWithDividends.filter((row) => !row.sector && row.script).map((row) => row.script))];
 
     if (!symbolsMissingSector.length) {
-      return res.status(200).json({ rows: normalizePortfolioRows(rows).map((row) => ({ ...row, portfolioName: row.portfolioName || tab.name })), portfolionumber });
+      return res.status(200).json({ rows: normalizePortfolioRows(rowsWithDividends).map((row) => ({ ...row, portfolioName: row.portfolioName || tab.name })), portfolionumber });
     }
 
     const scripts = await Script.find({ symbol: { $in: symbolsMissingSector } }).select("symbol sectorName -_id").lean();
     const sectorBySymbol = new Map(scripts.map((item) => [item.symbol, item.sectorName || ""]));
-    const enrichedRows = rows.map((row) => ({
+    const enrichedRows = rowsWithDividends.map((row) => ({
       ...row,
       sector: row.sector || sectorBySymbol.get(row.script) || ""
     }));
@@ -222,7 +302,7 @@ export const addPortfolioRow = async (req, res) => {
       script: normalizedScript,
       sector: matchedScript?.sectorName || "",
       quantity: sanitizeNumber(quantity),
-      avgPrice: sanitizeNumber(avgPrice),
+      avgPrice: roundToTwoDecimals(avgPrice),
       idealPercent: sanitizeNumber(idealPercent),
       dividendTotal: sanitizeNumber(dividendTotal || dividend),
       dividendAfterTax: sanitizeNumber(dividendAfterTax || dividendTotal || dividend),
@@ -259,7 +339,7 @@ export const updatePortfolioRow = async (req, res) => {
     }
 
     if (avgPrice !== undefined) {
-      row.avgPrice = sanitizeNumber(avgPrice);
+      row.avgPrice = roundToTwoDecimals(avgPrice);
     }
 
     if (idealPercent !== undefined) {

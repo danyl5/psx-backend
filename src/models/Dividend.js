@@ -44,6 +44,11 @@ const dividendSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0
+    },
+    portfolionumber: {
+      type: Number,
+      min: 1,
+      index: true
     }
   },
   {

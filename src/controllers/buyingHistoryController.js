@@ -1,4 +1,5 @@
 import BuyingHistory from "../models/BuyingHistory.js";
+import { applyPurchaseToPortfolio } from "./portfolioController.js";
 
 const sanitizeNumber = (value) => {
   const number = Number(value);
@@ -10,13 +11,17 @@ const sanitizeNumber = (value) => {
 
 export const addBuyingHistory = async (req, res) => {
   try {
-    const { script = "", date, quantity = 0, price = 0 } = req.body;
+    const { script = "", date, quantity = 0, price = 0, portfolionumber } = req.body;
 
     if (!script.trim()) {
       return res.status(400).json({ message: "Script is required" });
     }
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
+    }
+    const parsedPortfolioNumber = Number(portfolionumber);
+    if (!Number.isFinite(parsedPortfolioNumber) || parsedPortfolioNumber < 1) {
+      return res.status(400).json({ message: "Please select a portfolio before saving." });
     }
 
     const parsedDate = new Date(date);
@@ -36,6 +41,23 @@ export const addBuyingHistory = async (req, res) => {
       price: normalizedPrice,
       total
     });
+
+    try {
+      await applyPurchaseToPortfolio(req.user._id, {
+        script: buyingHistory.script,
+        quantity: normalizedQuantity,
+        price: normalizedPrice,
+        portfolionumber: parsedPortfolioNumber
+      });
+    } catch (portfolioError) {
+      if (portfolioError?.statusCode === 400 || portfolioError?.statusCode === 404) {
+        return res.status(portfolioError.statusCode).json({
+          message: portfolioError.message,
+          buyingHistory
+        });
+      }
+      // Buying record is already saved; portfolio sync should not block it.
+    }
 
     return res.status(201).json({ buyingHistory });
   } catch (error) {

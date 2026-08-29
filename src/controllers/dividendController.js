@@ -9,48 +9,124 @@ const sanitizeNumber = (value) => {
   return number;
 };
 
-const syncPortfolioDividendTotals = async (userId, script) => {
+const parsePortfolioNumber = (value) => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return null;
+  }
+  return Math.floor(parsed);
+};
+
+const getPortfolioRowFilter = (userId, portfolionumber) => {
+  if (portfolionumber === 1) {
+    return {
+      user: userId,
+      $or: [
+        { portfolionumber: 1 },
+        { portfolionumber: "1" },
+        { portfolionumber: { $exists: false } }
+      ]
+    };
+  }
+  return {
+    user: userId,
+    $or: [{ portfolionumber }, { portfolionumber: String(portfolionumber) }]
+  };
+};
+
+const getDividendQuery = (userId, portfolionumber, script) => {
+  const query = { user: userId };
+  if (script) {
+    query.script = script;
+  }
+
+  if (portfolionumber == null) {
+    return query;
+  }
+
+  if (portfolionumber === 1) {
+    query.$or = [
+      { portfolionumber: 1 },
+      { portfolionumber: "1" },
+      { portfolionumber: { $exists: false } },
+      { portfolionumber: null }
+    ];
+    return query;
+  }
+
+  query.$or = [
+    { portfolionumber },
+    { portfolionumber: String(portfolionumber) }
+  ];
+  return query;
+};
+
+export const getDividendTotalsByScript = async (userId, portfolionumber) => {
+  const records = await Dividend.find(getDividendQuery(userId, portfolionumber))
+    .select("script totalDividend totalAfterTax")
+    .lean();
+
+  const totalsByScript = new Map();
+  records.forEach((record) => {
+    const script = (record.script || "").toString().trim().toUpperCase();
+    if (!script) {
+      return;
+    }
+    const current = totalsByScript.get(script) || { totalDividend: 0, totalAfterTax: 0 };
+    current.totalDividend += sanitizeNumber(record.totalDividend);
+    current.totalAfterTax += sanitizeNumber(record.totalAfterTax);
+    totalsByScript.set(script, current);
+  });
+  return totalsByScript;
+};
+
+const syncPortfolioDividendTotals = async (userId, script, portfolionumber) => {
   const normalizedScript = (script || "").toString().trim().toUpperCase();
   if (!normalizedScript) {
     return;
   }
 
-  const [totals] = await Dividend.aggregate([
-    {
-      $match: {
-        user: userId,
-        script: normalizedScript
-      }
-    },
-    {
-      $group: {
-        _id: null,
-        totalDividend: { $sum: "$totalDividend" },
-        totalAfterTax: { $sum: "$totalAfterTax" }
-      }
-    }
-  ]);
+  const records = await Dividend.find(
+    getDividendQuery(userId, portfolionumber, normalizedScript)
+  )
+    .select("totalDividend totalAfterTax")
+    .lean();
 
-  await Portfolio.updateMany(
-    { user: userId, script: normalizedScript },
-    {
-      $set: {
-        dividendTotal: totals?.totalDividend || 0,
-        dividendAfterTax: totals?.totalAfterTax || 0
-      }
-    }
+  const totals = records.reduce(
+    (acc, record) => ({
+      totalDividend: acc.totalDividend + sanitizeNumber(record.totalDividend),
+      totalAfterTax: acc.totalAfterTax + sanitizeNumber(record.totalAfterTax)
+    }),
+    { totalDividend: 0, totalAfterTax: 0 }
   );
+
+  const row = await Portfolio.findOne({
+    ...getPortfolioRowFilter(userId, portfolionumber),
+    script: normalizedScript
+  });
+
+  if (!row) {
+    return;
+  }
+
+  row.dividendTotal = totals.totalDividend;
+  row.dividendAfterTax = totals.totalAfterTax;
+  await row.save();
 };
 
 export const addDividend = async (req, res) => {
   try {
-    const { script = "", date, shares = 0, dividendPerShare = 0 } = req.body;
+    const { script = "", date, shares = 0, dividendPerShare = 0, portfolionumber } = req.body;
 
     if (!script.trim()) {
       return res.status(400).json({ message: "Script is required" });
     }
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
+    }
+    const parsedPortfolioNumber = parsePortfolioNumber(portfolionumber);
+    if (!parsedPortfolioNumber) {
+      return res.status(400).json({ message: "Please select a portfolio before saving." });
     }
 
     const parsedDate = new Date(date);
@@ -72,10 +148,16 @@ export const addDividend = async (req, res) => {
       dividendPerShare: normalizedDividendPerShare,
       totalDividend,
       taxPercent,
-      totalAfterTax
+      totalAfterTax,
+      portfolionumber: parsedPortfolioNumber
     });
 
-    await syncPortfolioDividendTotals(req.user._id, dividend.script);
+    if (Number(dividend.portfolionumber) !== parsedPortfolioNumber) {
+      dividend.portfolionumber = parsedPortfolioNumber;
+      await dividend.save();
+    }
+
+    await syncPortfolioDividendTotals(req.user._id, dividend.script, parsedPortfolioNumber);
 
     return res.status(201).json({ dividend });
   } catch (error) {
@@ -101,7 +183,11 @@ export const deleteDividend = async (req, res) => {
       return res.status(404).json({ message: "Dividend record not found" });
     }
 
-    await syncPortfolioDividendTotals(req.user._id, dividend.script);
+    await syncPortfolioDividendTotals(
+      req.user._id,
+      dividend.script,
+      parsePortfolioNumber(dividend.portfolionumber)
+    );
 
     return res.status(200).json({ message: "Dividend record deleted successfully" });
   } catch (error) {
