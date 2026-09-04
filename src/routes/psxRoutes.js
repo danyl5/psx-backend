@@ -12,6 +12,7 @@ import {
   getAllInsiderTransactions,
   getBulkNotifications,
   getStockPriceHistory,
+  getUpperCapScanner,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -41,12 +42,13 @@ router.get("/insider-transactions/:symbol", getStockInsiderTransactions);
 
 router.get("/shariah-stocks", getAllShariahStocks);
 
+// GET /api/psx/upper-cap-scanner?days=30
+router.get("/upper-cap-scanner", getUpperCapScanner);
+
 router.post("/notifications", getBulkNotifications);
 router.get("/notifications/:symbol", getNotifications);
 
 // GET /api/psx/price-history/:symbol?days=30
 router.get("/price-history/:symbol", getStockPriceHistory);
-
-
 
 export default router;

@@ -12,6 +12,7 @@ import {
   getMultipleStockNotifications,
   getStockNotifications,
 } from "../services/notificationsService.js";
+import { getUpperCapScannerResults } from "../services/upperCapScannerService.js";
 
 // Simple delay helper for retry logic
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -305,5 +306,25 @@ export const getStockPriceHistory = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch stock price history from PSX." });
+  }
+};
+
+export const getUpperCapScanner = async (req, res) => {
+  try {
+    const days = Number(req.query.days || 30);
+
+    if (!Number.isInteger(days) || days < 5 || days > 30 || days % 5 !== 0) {
+      return res
+        .status(400)
+        .json({ message: "Days must be one of 5, 10, 15, 20, 25, or 30." });
+    }
+
+    const data = await getUpperCapScannerResults(days);
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getUpperCapScanner controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to generate upper cap scanner results." });
   }
 };
