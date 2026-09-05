@@ -34,8 +34,17 @@ const normalizeHistory = (response) =>
     .map((item) => ({
       date: new Date(item?.date),
       price: Number(item?.price),
+      volume:
+        item?.volume === null || item?.volume === undefined
+          ? null
+          : Number(item.volume),
     }))
-    .filter((item) => !Number.isNaN(item.date.getTime()) && item.price > 0)
+    .filter(
+      (item) =>
+        !Number.isNaN(item.date.getTime()) &&
+        item.price > 0 &&
+        (item.volume === null || !Number.isNaN(item.volume)),
+    )
     .sort((a, b) => a.date - b.date)
     .filter(
       (item, index, history) =>
@@ -55,6 +64,7 @@ const calculateWindow = (symbol, history, days) => {
       return {
         date: item.date,
         price: item.price,
+        volume: item.volume,
         previousPrice,
         changePercent,
         isUpperCap:
@@ -167,6 +177,10 @@ const buildSnapshot = async () => {
         .map((item) => ({
           date: new Date(item.date),
           price: Number(item.price),
+          volume:
+            item.volume === null || item.volume === undefined
+              ? null
+              : Number(item.volume),
         }))
         .sort((a, b) => a.date - b.date),
     ]),
@@ -177,7 +191,12 @@ const buildSnapshot = async () => {
   const staleSymbols = cachedRows
     .filter(
       (row) =>
-        Date.now() - new Date(row.fetchedAt).getTime() >= PRICE_HISTORY_TTL_MS,
+        Date.now() - new Date(row.fetchedAt).getTime() >=
+          PRICE_HISTORY_TTL_MS ||
+        row.prices.some(
+          (pricePoint) =>
+            pricePoint.volume === null || pricePoint.volume === undefined,
+        ),
     )
     .map((row) => row.symbol);
 
