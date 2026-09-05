@@ -1,4 +1,5 @@
 import PriceHistory from "../models/PriceHistory.js";
+import UpperCapSnapshot from "../models/UpperCapSnapshot.js";
 import {
   fetchAllShariaStocks,
   fetchStockPriceHistoryFromPSX,
@@ -7,8 +8,11 @@ import {
 const UPPER_CAP_THRESHOLD = 9.99;
 const DEFAULT_DAYS = 30;
 const MAX_DAYS = 30;
-const CACHE_TTL_MS = 15 * 60 * 1000;
-const REFRESH_CONCURRENCY = 6;
+const SNAPSHOT_TTL_MS = 60 * 60 * 1000;
+const PRICE_HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
+const REFRESH_CONCURRENCY = 2;
+
+let refreshPromise = null;
 
 const getArrayResponse = (response) => {
   const data =
@@ -139,6 +143,18 @@ export const getUpperCapScannerResults = async (
     Math.max(Number(requestedDays) || DEFAULT_DAYS, 5),
     MAX_DAYS,
   );
+  const snapshot = await UpperCapSnapshot.findOne({ key: "latest" }).lean();
+
+  return {
+    threshold: snapshot?.threshold || UPPER_CAP_THRESHOLD,
+    days,
+    calculatedAt: snapshot?.calculatedAt || null,
+    results: snapshot?.results || [],
+    status: refreshPromise ? "refreshing" : "ready",
+  };
+};
+
+const buildSnapshot = async () => {
   const shariahStocks = await fetchAllShariaStocks();
   const symbols = getSymbols(shariahStocks);
   const cachedRows = await PriceHistory.find({
@@ -155,35 +171,75 @@ export const getUpperCapScannerResults = async (
         .sort((a, b) => a.date - b.date),
     ]),
   );
-  const staleSymbols = cachedRows
-    .filter(
-      (row) => Date.now() - new Date(row.fetchedAt).getTime() >= CACHE_TTL_MS,
-    )
-    .map((row) => row.symbol);
   const missingSymbols = symbols.filter(
     (symbol) => !historyBySymbol.has(symbol),
   );
+  const staleSymbols = cachedRows
+    .filter(
+      (row) =>
+        Date.now() - new Date(row.fetchedAt).getTime() >= PRICE_HISTORY_TTL_MS,
+    )
+    .map((row) => row.symbol);
 
   await refreshWithLimit(
     [...new Set([...missingSymbols, ...staleSymbols])],
     historyBySymbol,
   );
 
-  const results = symbols
-    .map((symbol) => {
-      const history = historyBySymbol.get(symbol) || [];
-      const windows = {};
-      for (let windowDays = 5; windowDays <= MAX_DAYS; windowDays += 5) {
-        windows[windowDays] = calculateWindow(symbol, history, windowDays);
-      }
-      return { symbol, windows };
-    })
-    .filter((result) => result.windows[days].upperCapDays > 0);
+  const results = symbols.map((symbol) => {
+    const history = historyBySymbol.get(symbol) || [];
+    const windows = {};
+    for (let windowDays = 5; windowDays <= MAX_DAYS; windowDays += 5) {
+      windows[windowDays] = calculateWindow(symbol, history, windowDays);
+    }
+    return { symbol, windows };
+  });
+  await UpperCapSnapshot.findOneAndUpdate(
+    { key: "latest" },
+    {
+      key: "latest",
+      threshold: UPPER_CAP_THRESHOLD,
+      calculatedAt: new Date(),
+      results,
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true },
+  );
+};
 
+export const startUpperCapScannerRefresh = () => {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = buildSnapshot()
+    .catch((error) => {
+      console.error("Upper-cap scanner refresh failed:", error);
+    })
+    .finally(() => {
+      refreshPromise = null;
+    });
+
+  return refreshPromise;
+};
+
+export const getUpperCapScannerResponse = async (
+  requestedDays = DEFAULT_DAYS,
+) => {
+  const days = Math.min(
+    Math.max(Number(requestedDays) || DEFAULT_DAYS, 5),
+    MAX_DAYS,
+  );
+  const snapshot = await UpperCapSnapshot.findOne({ key: "latest" }).lean();
+  const isStale =
+    !snapshot ||
+    Date.now() - new Date(snapshot.calculatedAt).getTime() >= SNAPSHOT_TTL_MS;
+
+  if (isStale) startUpperCapScannerRefresh();
+
+  const response = await getUpperCapScannerResults(days);
   return {
     threshold: UPPER_CAP_THRESHOLD,
     days,
-    fetchedAt: new Date().toISOString(),
-    results,
+    calculatedAt: response.calculatedAt,
+    results: response.results,
+    status: response.calculatedAt ? response.status : "refreshing",
   };
 };

@@ -42,7 +42,9 @@ export async function fetchMarketUpdatesFromPSX() {
     const marketIndex = kse100Panel
       .find(".marketIndices__price")
       .contents()
-      .filter(function () { return this.type === "text"; })
+      .filter(function () {
+        return this.type === "text";
+      })
       .text()
       .trim();
     const marketValueAndPercentage = kse100Panel
@@ -179,7 +181,8 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
 
 export async function fetchAllUpcomingBoardMeetings({ from, to }) {
   try {
-    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
+    const url =
+      "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
 
     const params = new URLSearchParams();
 
@@ -193,7 +196,6 @@ export async function fetchAllUpcomingBoardMeetings({ from, to }) {
     throw new Error("Failed to fetch upcoming board meetings");
   }
 }
-
 
 export async function fetchAllInsiderTransactions({ from, to }) {
   try {
@@ -217,10 +219,15 @@ export async function fetchStockPriceHistoryFromPSX(symbol, days) {
   try {
     const url = `https://beta-restapi.sarmaaya.pk/api/stocks/price-history/${symbol}?days=${days}`;
 
-    const response = await axios.get(url);
+    const response = await axios.get(url, { timeout: 10000 });
     return response.data;
   } catch (error) {
-    console.error("Error fetching stock price history:", error.message);
+    console.error("Error fetching stock price history:", {
+      symbol,
+      status: error.response?.status,
+      code: error.code,
+      message: error.message,
+    });
     throw new Error("Failed to fetch stock price history");
   }
 }
