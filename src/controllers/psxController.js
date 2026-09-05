@@ -313,10 +313,10 @@ export const getUpperCapScanner = async (req, res) => {
   try {
     const days = Number(req.query.days || 30);
 
-    if (!Number.isInteger(days) || days < 5 || days > 30 || days % 5 !== 0) {
+    if (!Number.isInteger(days) || days < 5 || days > 60 || days % 5 !== 0) {
       return res
         .status(400)
-        .json({ message: "Days must be one of 5, 10, 15, 20, 25, or 30." });
+        .json({ message: "Days must be a multiple of 5 between 5 and 60." });
     }
 
     const data = await getUpperCapScannerResponse(days);

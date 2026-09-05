@@ -7,7 +7,7 @@ import {
 
 const UPPER_CAP_THRESHOLD = 9.99;
 const DEFAULT_DAYS = 30;
-const MAX_DAYS = 30;
+const MAX_DAYS = 60;
 const SNAPSHOT_TTL_MS = 60 * 60 * 1000;
 const PRICE_HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
 const REFRESH_CONCURRENCY = 2;
