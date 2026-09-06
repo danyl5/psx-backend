@@ -32,8 +32,19 @@ export const getScripts = async (req, res) => {
   } catch (error) {
     console.error("Error in getScripts:", error);
 
-    return res.status(500).json({
-      message: "Failed to fetch scripts.",
+    if (error?.status === 429) {
+      if (error.retryAfter) {
+        res.set("Retry-After", String(error.retryAfter));
+      }
+
+      return res.status(503).json({
+        message: "The scripts provider is temporarily rate-limited. Please retry later.",
+        retryAfter: error.retryAfter,
+      });
+    }
+
+    return res.status(502).json({
+      message: "The scripts provider could not be reached.",
     });
   }
 };
