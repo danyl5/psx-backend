@@ -13,6 +13,7 @@ import {
   getBulkNotifications,
   getStockPriceHistory,
   getUpperCapScanner,
+  getMarketUpdates,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -22,6 +23,7 @@ router.get("/price/:symbol", getStockPrice);
 
 // Multiple symbols: POST /api/psx/prices  { "symbols": ["SYS", "HBL", ...] }
 router.post("/prices", getMultipleStockPricesFromPSX);
+router.get("/market-updates", getMarketUpdates);
 
 // GET /api/psx/dividends/:symbol
 router.get("/dividends/:symbol", getStockDividends);

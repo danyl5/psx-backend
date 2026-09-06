@@ -31,7 +31,12 @@ export async function fetchStockPriceFromPSX(symbol) {
   }
 }
 
-export async function fetchMarketUpdatesFromPSX() {
+let marketUpdatesCache = null;
+let marketUpdatesCachedAt = 0;
+let marketUpdatesRequest = null;
+const MARKET_UPDATES_CACHE_TTL_MS = 60 * 1000;
+
+async function fetchMarketUpdatesUncachedFromPSX() {
   try {
     const url = "https://dps.psx.com.pk/";
     const response = await axios.get(url, {
@@ -91,6 +96,30 @@ export async function fetchMarketUpdatesFromPSX() {
       marketState: "Closed",
     };
   }
+}
+
+export async function fetchMarketUpdatesFromPSX() {
+  const now = Date.now();
+  if (
+    marketUpdatesCache &&
+    now - marketUpdatesCachedAt < MARKET_UPDATES_CACHE_TTL_MS
+  ) {
+    return marketUpdatesCache;
+  }
+
+  if (!marketUpdatesRequest) {
+    marketUpdatesRequest = fetchMarketUpdatesUncachedFromPSX()
+      .then((data) => {
+        marketUpdatesCache = data;
+        marketUpdatesCachedAt = Date.now();
+        return data;
+      })
+      .finally(() => {
+        marketUpdatesRequest = null;
+      });
+  }
+
+  return marketUpdatesRequest;
 }
 
 export async function fetchStockDividendsFromPSX(symbol) {

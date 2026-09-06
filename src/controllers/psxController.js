@@ -75,21 +75,28 @@ export const getMultipleStockPricesFromPSX = async (req, res) => {
         .json({ message: "At least one valid symbol is required." });
     }
 
-    const [results, marketUpdates] = await Promise.all([
-      Promise.all(
-        symbols.map((symbol) =>
-          fetchStockPriceFromPSXWithRetry(symbol, { retries: 2, delayMs: 700 }),
-        ),
+    const results = await Promise.all(
+      symbols.map((symbol) =>
+        fetchStockPriceFromPSXWithRetry(symbol, { retries: 2, delayMs: 700 }),
       ),
-      fetchMarketUpdatesFromPSX(),
-    ]);
+    );
 
-    return res.status(200).json({ symbols, data: results, marketUpdates });
+    return res.status(200).json({ symbols, data: results });
   } catch (error) {
     console.error("Error in getMultipleStockPrices controller:", error);
     return res
       .status(500)
       .json({ message: "Failed to fetch stock prices from PSX." });
+  }
+};
+
+export const getMarketUpdates = async (req, res) => {
+  try {
+    const marketUpdates = await fetchMarketUpdatesFromPSX();
+    return res.status(200).json({ marketUpdates });
+  } catch (error) {
+    console.error("Error fetching market updates:", error);
+    return res.status(500).json({ message: "Failed to fetch market updates." });
   }
 };
 
