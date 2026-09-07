@@ -1,7 +1,8 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 
-const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+const isStrongPassword = (password) =>
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
 
 export const getProfile = async (req, res) => {
   return res.status(200).json({
@@ -12,8 +13,8 @@ export const getProfile = async (req, res) => {
       budgetAmount: req.user.budgetAmount ?? 0,
       filer: req.user.filer ?? true,
       zakatDeductible: req.user.zakatDeductible ?? true,
-      active: req.user.active ?? false
-    }
+      active: req.user.active ?? false,
+    },
   });
 };
 
@@ -26,7 +27,7 @@ export const updateProfile = async (req, res) => {
     }
     if (typeof filer !== "boolean" || typeof zakatDeductible !== "boolean") {
       return res.status(400).json({
-        message: "Filer and zakat deductible must be boolean true/false"
+        message: "Filer and zakat deductible must be boolean true/false",
       });
     }
 
@@ -42,7 +43,9 @@ export const updateProfile = async (req, res) => {
     if (pin) {
       const pinStr = String(pin).trim();
       if (!/^\d{4}$/.test(pinStr)) {
-        return res.status(400).json({ message: "Pin must be exactly 4 digits" });
+        return res
+          .status(400)
+          .json({ message: "Pin must be exactly 4 digits" });
       }
       const salt = await bcrypt.genSalt(10);
       user.pin = await bcrypt.hash(pinStr, salt);
@@ -59,11 +62,13 @@ export const updateProfile = async (req, res) => {
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
         zakatDeductible: user.zakatDeductible ?? true,
-        active: user.active ?? false
-      }
+        active: user.active ?? false,
+      },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Server error while updating profile" });
+    return res
+      .status(500)
+      .json({ message: "Server error while updating profile" });
   }
 };
 
@@ -72,12 +77,15 @@ export const changePassword = async (req, res) => {
     const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
     if (!oldPassword || !newPassword || !confirmNewPassword) {
-      return res.status(400).json({ message: "All password fields are required" });
+      return res
+        .status(400)
+        .json({ message: "All password fields are required" });
     }
 
     if (!isStrongPassword(newPassword)) {
       return res.status(400).json({
-        message: "New password must be at least 8 characters and include uppercase, lowercase, and number"
+        message:
+          "New password must be at least 8 characters and include uppercase, lowercase, and number",
       });
     }
 
@@ -101,6 +109,8 @@ export const changePassword = async (req, res) => {
 
     return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error while changing password" });
+    return res
+      .status(500)
+      .json({ message: "Server error while changing password" });
   }
 };

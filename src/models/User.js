@@ -5,24 +5,24 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required"],
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlength: 8
+      minlength: 8,
     },
     active: {
       type: Boolean,
       required: true,
-      default: false
+      default: false,
     },
     // 4-digit numeric pin used for password recovery.
     // Stored hashed with bcrypt (set during signup/forgot-password).
@@ -34,22 +34,22 @@ const userSchema = new mongoose.Schema(
     budgetAmount: {
       type: Number,
       min: 0,
-      default: 0
+      default: 0,
     },
     filer: {
       type: Boolean,
       required: [true, "Filer status is required"],
-      default: true
+      default: true,
     },
     zakatDeductible: {
       type: Boolean,
       required: [true, "Zakat deductible status is required"],
-      default: true
-    }
+      default: true,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 const User = mongoose.model("User", userSchema);

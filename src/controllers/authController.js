@@ -3,7 +3,8 @@ import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
 const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-const isStrongPassword = (password) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+const isStrongPassword = (password) =>
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
 
 export const signup = async (req, res) => {
   try {
@@ -17,12 +18,10 @@ export const signup = async (req, res) => {
       typeof filer !== "boolean" ||
       typeof zakatDeductible !== "boolean"
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Name, email, password, pin, filer, and zakat deductible are required",
-        });
+      return res.status(400).json({
+        message:
+          "Name, email, password, pin, filer, and zakat deductible are required",
+      });
     }
 
     if (!isValidEmail(email)) {
@@ -31,7 +30,8 @@ export const signup = async (req, res) => {
 
     if (!isStrongPassword(password)) {
       return res.status(400).json({
-        message: "Password must be at least 8 characters and include uppercase, lowercase, and number"
+        message:
+          "Password must be at least 8 characters and include uppercase, lowercase, and number",
       });
     }
 
@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       pin: hashedPin,
       filer,
-      zakatDeductible
+      zakatDeductible,
     });
 
     return res.status(201).json({
@@ -67,8 +67,8 @@ export const signup = async (req, res) => {
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
         zakatDeductible: user.zakatDeductible ?? true,
-        active: user.active ?? false
-      }
+        active: user.active ?? false,
+      },
     });
   } catch (error) {
     return res.status(500).json({ message: "Server error during signup." });
@@ -80,7 +80,9 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required." });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
 
     const user = await User.findOne({ email: email.toLowerCase().trim() });
@@ -96,7 +98,7 @@ export const login = async (req, res) => {
     if (!user.active) {
       return res.status(403).json({
         code: "USER_INACTIVE",
-        message: "Your account is not active yet."
+        message: "Your account is not active yet.",
       });
     }
 
@@ -109,8 +111,8 @@ export const login = async (req, res) => {
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
         zakatDeductible: user.zakatDeductible ?? true,
-        active: user.active ?? false
-      }
+        active: user.active ?? false,
+      },
     });
   } catch (error) {
     return res.status(500).json({ message: "Server error during login." });
@@ -146,7 +148,9 @@ export const verifyPinForForgotPassword = async (req, res) => {
 
     return res.status(200).json({ message: "Pin verified successfully." });
   } catch (error) {
-    return res.status(500).json({ message: "Server error while verifying pin." });
+    return res
+      .status(500)
+      .json({ message: "Server error while verifying pin." });
   }
 };
 
@@ -154,13 +158,10 @@ export const resetPasswordWithPin = async (req, res) => {
   try {
     const { email, pin, newPassword, confirmNewPassword } = req.body;
 
-    if (
-      !email ||
-      !pin ||
-      !newPassword ||
-      !confirmNewPassword
-    ) {
-      return res.status(400).json({ message: "All password fields are required" });
+    if (!email || !pin || !newPassword || !confirmNewPassword) {
+      return res
+        .status(400)
+        .json({ message: "All password fields are required" });
     }
 
     if (!isValidEmail(email)) {
@@ -175,7 +176,7 @@ export const resetPasswordWithPin = async (req, res) => {
     if (!isStrongPassword(newPassword)) {
       return res.status(400).json({
         message:
-          "New password must be at least 8 characters and include uppercase, lowercase, and number"
+          "New password must be at least 8 characters and include uppercase, lowercase, and number",
       });
     }
 
@@ -199,6 +200,8 @@ export const resetPasswordWithPin = async (req, res) => {
 
     return res.status(200).json({ message: "Password reset successfully." });
   } catch (error) {
-    return res.status(500).json({ message: "Server error while resetting password." });
+    return res
+      .status(500)
+      .json({ message: "Server error while resetting password." });
   }
 };
