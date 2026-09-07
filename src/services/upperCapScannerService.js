@@ -79,6 +79,14 @@ const calculateWindow = (symbol, history, days) => {
     maximumConsecutiveDays = Math.max(maximumConsecutiveDays, consecutiveDays);
   });
 
+  let latestUpperCapStreak = 0;
+  for (let index = rows.length - 1; index >= 0; index -= 1) {
+    const row = rows[index];
+    if (row.changePercent === null) continue;
+    if (!row.isUpperCap) break;
+    latestUpperCapStreak += 1;
+  }
+
   const currentRow = rows[rows.length - 1];
   const firstPrice = rows[0]?.price || 0;
 
@@ -91,6 +99,7 @@ const calculateWindow = (symbol, history, days) => {
     ).length,
     currentChangePercent: currentRow?.changePercent ?? null,
     currentDayHit: Boolean(currentRow?.isUpperCap),
+    latestUpperCapStreak,
     maximumConsecutiveDays,
     firstPrice,
     currentPrice: currentRow?.price || 0,
