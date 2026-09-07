@@ -326,7 +326,8 @@ export const getUpperCapScanner = async (req, res) => {
         .json({ message: "Days must be a multiple of 5 between 5 and 60." });
     }
 
-    const data = await getUpperCapScannerResponse(days);
+    const forceRefresh = req.query.refresh === "true";
+    const data = await getUpperCapScannerResponse(days, forceRefresh);
     return res.status(data.status === "refreshing" ? 202 : 200).json(data);
   } catch (error) {
     console.error("Error in getUpperCapScanner controller:", error);

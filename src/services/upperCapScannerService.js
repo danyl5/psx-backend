@@ -5,7 +5,7 @@ import {
   fetchStockPriceHistoryFromPSX,
 } from "./psxService.js";
 
-const UPPER_CAP_THRESHOLD = 9.99;
+const UPPER_CAP_THRESHOLD = 9.98;
 const DEFAULT_DAYS = 30;
 const MAX_DAYS = 60;
 const SNAPSHOT_TTL_MS = 60 * 60 * 1000;
@@ -173,7 +173,7 @@ export const getUpperCapScannerResults = async (
   };
 };
 
-const buildSnapshot = async () => {
+const buildSnapshot = async (forceRefresh = false) => {
   const shariahStocks = await fetchAllShariaStocks();
   const symbols = getSymbols(shariahStocks);
   const cachedRows = await PriceHistory.find({
@@ -210,7 +210,7 @@ const buildSnapshot = async () => {
     .map((row) => row.symbol);
 
   await refreshWithLimit(
-    [...new Set([...missingSymbols, ...staleSymbols])],
+    forceRefresh ? symbols : [...new Set([...missingSymbols, ...staleSymbols])],
     historyBySymbol,
   );
 
@@ -234,10 +234,10 @@ const buildSnapshot = async () => {
   );
 };
 
-export const startUpperCapScannerRefresh = () => {
+export const startUpperCapScannerRefresh = (forceRefresh = false) => {
   if (refreshPromise) return refreshPromise;
 
-  refreshPromise = buildSnapshot()
+  refreshPromise = buildSnapshot(forceRefresh)
     .catch((error) => {
       console.error("Upper-cap scanner refresh failed:", error);
     })
@@ -250,17 +250,24 @@ export const startUpperCapScannerRefresh = () => {
 
 export const getUpperCapScannerResponse = async (
   requestedDays = DEFAULT_DAYS,
+  forceRefresh = false,
 ) => {
   const days = Math.min(
     Math.max(Number(requestedDays) || DEFAULT_DAYS, 5),
     MAX_DAYS,
   );
-  const snapshot = await UpperCapSnapshot.findOne({ key: "latest" }).lean();
-  const isStale =
-    !snapshot ||
-    Date.now() - new Date(snapshot.calculatedAt).getTime() >= SNAPSHOT_TTL_MS;
+  if (forceRefresh) {
+    await startUpperCapScannerRefresh(true);
+  } else {
+    const snapshot = await UpperCapSnapshot.findOne({ key: "latest" })
+      .select("calculatedAt")
+      .lean();
+    const isStale =
+      !snapshot ||
+      Date.now() - new Date(snapshot.calculatedAt).getTime() >= SNAPSHOT_TTL_MS;
 
-  if (isStale) startUpperCapScannerRefresh();
+    if (isStale) startUpperCapScannerRefresh();
+  }
 
   const response = await getUpperCapScannerResults(days);
   return {
@@ -268,6 +275,6 @@ export const getUpperCapScannerResponse = async (
     days,
     calculatedAt: response.calculatedAt,
     results: response.results,
-    status: response.calculatedAt ? response.status : "refreshing",
+    status: response.calculatedAt ? "ready" : "refreshing",
   };
 };
