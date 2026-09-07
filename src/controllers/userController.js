@@ -11,7 +11,8 @@ export const getProfile = async (req, res) => {
       email: req.user.email,
       budgetAmount: req.user.budgetAmount ?? 0,
       filer: req.user.filer ?? true,
-      zakatDeductible: req.user.zakatDeductible ?? true
+      zakatDeductible: req.user.zakatDeductible ?? true,
+      active: req.user.active ?? false
     }
   });
 };
@@ -57,7 +58,8 @@ export const updateProfile = async (req, res) => {
         email: user.email,
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
-        zakatDeductible: user.zakatDeductible ?? true
+        zakatDeductible: user.zakatDeductible ?? true,
+        active: user.active ?? false
       }
     });
   } catch (error) {

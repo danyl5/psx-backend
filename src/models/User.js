@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: 8
     },
+    active: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
     // 4-digit numeric pin used for password recovery.
     // Stored hashed with bcrypt (set during signup/forgot-password).
     // Not required for existing users created before this feature.

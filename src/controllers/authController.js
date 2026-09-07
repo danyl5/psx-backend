@@ -60,14 +60,14 @@ export const signup = async (req, res) => {
     });
 
     return res.status(201).json({
-      token: generateToken(user._id),
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
-        zakatDeductible: user.zakatDeductible ?? true
+        zakatDeductible: user.zakatDeductible ?? true,
+        active: user.active ?? false
       }
     });
   } catch (error) {
@@ -93,6 +93,13 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password." });
     }
 
+    if (!user.active) {
+      return res.status(403).json({
+        code: "USER_INACTIVE",
+        message: "Your account is not active yet."
+      });
+    }
+
     return res.status(200).json({
       token: generateToken(user._id),
       user: {
@@ -101,7 +108,8 @@ export const login = async (req, res) => {
         email: user.email,
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
-        zakatDeductible: user.zakatDeductible ?? true
+        zakatDeductible: user.zakatDeductible ?? true,
+        active: user.active ?? false
       }
     });
   } catch (error) {
