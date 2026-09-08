@@ -2,6 +2,7 @@ import { fetchStockPriceFromPSX } from "../services/psxService.js";
 import { fetchMarketUpdatesFromPSX } from "../services/psxService.js";
 import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
+import { fetchDashboardMarketDataFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
@@ -169,6 +170,32 @@ export const getStockAnnouncements = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch announcements from PSX." });
+  }
+};
+
+export const getDashboardMarketData = async (req, res) => {
+  try {
+    const symbolsInput = req.body?.symbols;
+
+    if (!Array.isArray(symbolsInput) || symbolsInput.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "symbols must be a non-empty array." });
+    }
+
+    const startDate = (req.body?.startDate || "").toString().trim();
+    const endDate = (req.body?.endDate || "").toString().trim();
+    const data = await fetchDashboardMarketDataFromPSX(symbolsInput, {
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    });
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getDashboardMarketData controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch dashboard market data from PSX." });
   }
 };
 

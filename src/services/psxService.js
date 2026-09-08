@@ -163,6 +163,63 @@ export async function fetchStockAnnouncementsFromPSX(
   }
 }
 
+const dashboardMarketDataCache = new Map();
+const dashboardMarketDataRequests = new Map();
+const DASHBOARD_MARKET_DATA_CACHE_TTL_MS = 5 * 60 * 1000;
+
+export async function fetchDashboardMarketDataFromPSX(
+  symbols,
+  { startDate, endDate } = {},
+) {
+  const normalizedSymbols = [
+    ...new Set(
+      symbols
+        .map((symbol) => (symbol || "").toString().trim().toUpperCase())
+        .filter(Boolean),
+    ),
+  ].sort();
+  const cacheKey = JSON.stringify({ normalizedSymbols, startDate, endDate });
+  const cached = dashboardMarketDataCache.get(cacheKey);
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.data;
+  }
+
+  const existingRequest = dashboardMarketDataRequests.get(cacheKey);
+  if (existingRequest) return existingRequest;
+
+  const request = Promise.all(
+    normalizedSymbols.map(async (symbol) => {
+      const [dividends, announcements] = await Promise.allSettled([
+        fetchStockDividendsFromPSX(symbol),
+        fetchStockAnnouncementsFromPSX(symbol, { startDate, endDate }),
+      ]);
+
+      return {
+        symbol,
+        dividends:
+          dividends.status === "fulfilled" ? dividends.value : null,
+        announcements:
+          announcements.status === "fulfilled" ? announcements.value : null,
+      };
+    }),
+  )
+    .then((data) => {
+      const result = { data };
+      dashboardMarketDataCache.set(cacheKey, {
+        data: result,
+        expiresAt: Date.now() + DASHBOARD_MARKET_DATA_CACHE_TTL_MS,
+      });
+      return result;
+    })
+    .finally(() => {
+      dashboardMarketDataRequests.delete(cacheKey);
+    });
+
+  dashboardMarketDataRequests.set(cacheKey, request);
+  return request;
+}
+
 export async function fetchStockInsiderTransactionsFromPSX(symbol) {
   try {
     const url = `https://beta-restapi.sarmaaya.pk/api/stocks/stock-insiders/${symbol}`;
