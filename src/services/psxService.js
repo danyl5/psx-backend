@@ -36,6 +36,25 @@ let marketUpdatesCachedAt = 0;
 let marketUpdatesRequest = null;
 const MARKET_UPDATES_CACHE_TTL_MS = 60 * 1000;
 
+function getPSXMarketState(now = new Date()) {
+  const pakistanNow = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Karachi" }),
+  );
+
+  const day = pakistanNow.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+  const currentMinutes = pakistanNow.getHours() * 60 + pakistanNow.getMinutes();
+
+  if (day === 0 || day === 6) return "Closed";
+
+  const isFriday = day === 5;
+  const openMinutes = isFriday ? 9 * 60 + 15 : 9 * 60 + 30;
+  const closeMinutes = isFriday ? 16 * 60 + 30 : 15 * 60 + 30;
+
+  return currentMinutes >= openMinutes && currentMinutes < closeMinutes
+    ? "Open"
+    : "Closed";
+}
+
 async function fetchMarketUpdatesUncachedFromPSX() {
   try {
     const url = "https://dps.psx.com.pk/";
@@ -65,20 +84,8 @@ async function fetchMarketUpdatesUncachedFromPSX() {
     // Derived from the REST response above.
 
     // Market time text
-    // Determine market state
-    let marketState = "Closed";
-
-    if (marketTime) {
-      const lastUpdate = new Date(marketTime);
-      const now = new Date();
-
-      const diffMinutes = (now - lastUpdate) / (1000 * 60);
-
-      // if updated recently → market open
-      if (diffMinutes < 10) {
-        marketState = "Open";
-      }
-    }
+    // Determine market state using PSX trading hours in Pakistan time
+    const marketState = getPSXMarketState();
 
     return {
       marketIndex,
@@ -197,8 +204,7 @@ export async function fetchDashboardMarketDataFromPSX(
 
       return {
         symbol,
-        dividends:
-          dividends.status === "fulfilled" ? dividends.value : null,
+        dividends: dividends.status === "fulfilled" ? dividends.value : null,
         announcements:
           announcements.status === "fulfilled" ? announcements.value : null,
       };
