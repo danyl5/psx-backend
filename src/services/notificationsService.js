@@ -62,7 +62,7 @@ export const getStockNotifications = async (symbol) => {
         today,
         startDate: formattedStart,
       })
-    ).sort((a, b) => new Date(b.date) - new Date(a.date));
+    ).sort((a, b) => new Date(a.date) - new Date(b.date));
 
     return {
       success: true,
@@ -111,7 +111,7 @@ export const getMultipleStockNotifications = async (symbolsInput) => {
       .flatMap((result) =>
         result.status === "fulfilled" ? result.value : [],
       )
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const failedSymbols = settled
       .map((result, index) =>
