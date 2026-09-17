@@ -4,6 +4,7 @@ const pricePointSchema = new mongoose.Schema(
   {
     date: { type: Date, required: true },
     price: { type: Number, required: true },
+    volume: { type: Number, default: null },
   },
   { _id: false },
 );

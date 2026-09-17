@@ -2,6 +2,7 @@ import { fetchStockPriceFromPSX } from "../services/psxService.js";
 import { fetchMarketUpdatesFromPSX } from "../services/psxService.js";
 import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
+import { fetchDashboardMarketDataFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
@@ -12,7 +13,7 @@ import {
   getMultipleStockNotifications,
   getStockNotifications,
 } from "../services/notificationsService.js";
-import { getUpperCapScannerResults } from "../services/upperCapScannerService.js";
+import { getUpperCapScannerResponse } from "../services/upperCapScannerService.js";
 
 // Simple delay helper for retry logic
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -75,21 +76,28 @@ export const getMultipleStockPricesFromPSX = async (req, res) => {
         .json({ message: "At least one valid symbol is required." });
     }
 
-    const [results, marketUpdates] = await Promise.all([
-      Promise.all(
-        symbols.map((symbol) =>
-          fetchStockPriceFromPSXWithRetry(symbol, { retries: 2, delayMs: 700 }),
-        ),
+    const results = await Promise.all(
+      symbols.map((symbol) =>
+        fetchStockPriceFromPSXWithRetry(symbol, { retries: 2, delayMs: 700 }),
       ),
-      fetchMarketUpdatesFromPSX(),
-    ]);
+    );
 
-    return res.status(200).json({ symbols, data: results, marketUpdates });
+    return res.status(200).json({ symbols, data: results });
   } catch (error) {
     console.error("Error in getMultipleStockPrices controller:", error);
     return res
       .status(500)
       .json({ message: "Failed to fetch stock prices from PSX." });
+  }
+};
+
+export const getMarketUpdates = async (req, res) => {
+  try {
+    const marketUpdates = await fetchMarketUpdatesFromPSX();
+    return res.status(200).json({ marketUpdates });
+  } catch (error) {
+    console.error("Error fetching market updates:", error);
+    return res.status(500).json({ message: "Failed to fetch market updates." });
   }
 };
 
@@ -162,6 +170,32 @@ export const getStockAnnouncements = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch announcements from PSX." });
+  }
+};
+
+export const getDashboardMarketData = async (req, res) => {
+  try {
+    const symbolsInput = req.body?.symbols;
+
+    if (!Array.isArray(symbolsInput) || symbolsInput.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "symbols must be a non-empty array." });
+    }
+
+    const startDate = (req.body?.startDate || "").toString().trim();
+    const endDate = (req.body?.endDate || "").toString().trim();
+    const data = await fetchDashboardMarketDataFromPSX(symbolsInput, {
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+    });
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getDashboardMarketData controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch dashboard market data from PSX." });
   }
 };
 
@@ -313,14 +347,15 @@ export const getUpperCapScanner = async (req, res) => {
   try {
     const days = Number(req.query.days || 30);
 
-    if (!Number.isInteger(days) || days < 5 || days > 30 || days % 5 !== 0) {
+    if (!Number.isInteger(days) || days < 5 || days > 60 || days % 5 !== 0) {
       return res
         .status(400)
-        .json({ message: "Days must be one of 5, 10, 15, 20, 25, or 30." });
+        .json({ message: "Days must be a multiple of 5 between 5 and 60." });
     }
 
-    const data = await getUpperCapScannerResults(days);
-    return res.status(200).json(data);
+    const forceRefresh = req.query.refresh === "true";
+    const data = await getUpperCapScannerResponse(days, forceRefresh);
+    return res.status(data.status === "refreshing" ? 202 : 200).json(data);
   } catch (error) {
     console.error("Error in getUpperCapScanner controller:", error);
     return res

@@ -31,7 +31,31 @@ export async function fetchStockPriceFromPSX(symbol) {
   }
 }
 
-export async function fetchMarketUpdatesFromPSX() {
+let marketUpdatesCache = null;
+let marketUpdatesCachedAt = 0;
+let marketUpdatesRequest = null;
+const MARKET_UPDATES_CACHE_TTL_MS = 60 * 1000;
+
+function getPSXMarketState(now = new Date()) {
+  const pakistanNow = new Date(
+    now.toLocaleString("en-US", { timeZone: "Asia/Karachi" }),
+  );
+
+  const day = pakistanNow.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
+  const currentMinutes = pakistanNow.getHours() * 60 + pakistanNow.getMinutes();
+
+  if (day === 0 || day === 6) return "Closed";
+
+  const isFriday = day === 5;
+  const openMinutes = isFriday ? 9 * 60 + 15 : 9 * 60 + 30;
+  const closeMinutes = isFriday ? 16 * 60 + 30 : 15 * 60 + 30;
+
+  return currentMinutes >= openMinutes && currentMinutes < closeMinutes
+    ? "Open"
+    : "Closed";
+}
+
+async function fetchMarketUpdatesUncachedFromPSX() {
   try {
     const url = "https://dps.psx.com.pk/";
     const response = await axios.get(url, {
@@ -42,7 +66,9 @@ export async function fetchMarketUpdatesFromPSX() {
     const marketIndex = kse100Panel
       .find(".marketIndices__price")
       .contents()
-      .filter(function () { return this.type === "text"; })
+      .filter(function () {
+        return this.type === "text";
+      })
       .text()
       .trim();
     const marketValueAndPercentage = kse100Panel
@@ -58,20 +84,8 @@ export async function fetchMarketUpdatesFromPSX() {
     // Derived from the REST response above.
 
     // Market time text
-    // Determine market state
-    let marketState = "Closed";
-
-    if (marketTime) {
-      const lastUpdate = new Date(marketTime);
-      const now = new Date();
-
-      const diffMinutes = (now - lastUpdate) / (1000 * 60);
-
-      // if updated recently → market open
-      if (diffMinutes < 10) {
-        marketState = "Open";
-      }
-    }
+    // Determine market state using PSX trading hours in Pakistan time
+    const marketState = getPSXMarketState();
 
     return {
       marketIndex,
@@ -89,6 +103,30 @@ export async function fetchMarketUpdatesFromPSX() {
       marketState: "Closed",
     };
   }
+}
+
+export async function fetchMarketUpdatesFromPSX() {
+  const now = Date.now();
+  if (
+    marketUpdatesCache &&
+    now - marketUpdatesCachedAt < MARKET_UPDATES_CACHE_TTL_MS
+  ) {
+    return marketUpdatesCache;
+  }
+
+  if (!marketUpdatesRequest) {
+    marketUpdatesRequest = fetchMarketUpdatesUncachedFromPSX()
+      .then((data) => {
+        marketUpdatesCache = data;
+        marketUpdatesCachedAt = Date.now();
+        return data;
+      })
+      .finally(() => {
+        marketUpdatesRequest = null;
+      });
+  }
+
+  return marketUpdatesRequest;
 }
 
 export async function fetchStockDividendsFromPSX(symbol) {
@@ -207,6 +245,7 @@ export async function fetchDashboardMarketDataFromPSX(
   )
     .then((data) => {
       const result = { data: sortDashboardDataByUpcomingExDate(data) };
+
       dashboardMarketDataCache.set(cacheKey, {
         data: result,
         expiresAt: Date.now() + DASHBOARD_MARKET_DATA_CACHE_TTL_MS,
@@ -268,7 +307,8 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
 
 export async function fetchAllUpcomingBoardMeetings({ from, to }) {
   try {
-    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
+    const url =
+      "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
 
     const params = new URLSearchParams();
 
@@ -282,7 +322,6 @@ export async function fetchAllUpcomingBoardMeetings({ from, to }) {
     throw new Error("Failed to fetch upcoming board meetings");
   }
 }
-
 
 export async function fetchAllInsiderTransactions({ from, to }) {
   try {
@@ -306,10 +345,15 @@ export async function fetchStockPriceHistoryFromPSX(symbol, days) {
   try {
     const url = `https://beta-restapi.sarmaaya.pk/api/stocks/price-history/${symbol}?days=${days}`;
 
-    const response = await axios.get(url);
+    const response = await axios.get(url, { timeout: 10000 });
     return response.data;
   } catch (error) {
-    console.error("Error fetching stock price history:", error.message);
+    console.error("Error fetching stock price history:", {
+      symbol,
+      status: error.response?.status,
+      code: error.code,
+      message: error.message,
+    });
     throw new Error("Failed to fetch stock price history");
   }
 }

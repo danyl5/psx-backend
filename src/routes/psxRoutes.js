@@ -4,6 +4,7 @@ import {
   getMultipleStockPricesFromPSX,
   getStockDividends,
   getStockAnnouncements,
+  getDashboardMarketData,
   getAllShariahStocks,
   getNotifications,
   getStockInsiderTransactions,
@@ -13,6 +14,7 @@ import {
   getBulkNotifications,
   getStockPriceHistory,
   getUpperCapScanner,
+  getMarketUpdates,
 } from "../controllers/psxController.js";
 
 const router = Router();
@@ -22,12 +24,16 @@ router.get("/price/:symbol", getStockPrice);
 
 // Multiple symbols: POST /api/psx/prices  { "symbols": ["SYS", "HBL", ...] }
 router.post("/prices", getMultipleStockPricesFromPSX);
+router.get("/market-updates", getMarketUpdates);
 
 // GET /api/psx/dividends/:symbol
 router.get("/dividends/:symbol", getStockDividends);
 
 // GET /api/psx/announcements/:symbol?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/announcements/:symbol", getStockAnnouncements);
+
+// POST /api/psx/dashboard-data { symbols, startDate, endDate }
+router.post("/dashboard-data", getDashboardMarketData);
 
 // GET /api/psx/payouts?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/payouts", getAllUpcomingPayouts);

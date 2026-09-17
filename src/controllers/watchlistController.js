@@ -1,5 +1,8 @@
 import Watchlist from "../models/Watchlist.js";
-import Script from "../models/Script.js";
+import {
+  findScriptBySymbol,
+  findScriptsBySymbols,
+} from "../services/scriptService.js";
 
 export const getWatchlistRows = async (req, res) => {
   try {
@@ -8,23 +11,19 @@ export const getWatchlistRows = async (req, res) => {
       .lean();
 
     const symbols = [...new Set(rows.map((row) => row.script).filter(Boolean))];
-    const scripts = symbols.length
-      ? await Script.find({ symbol: { $in: symbols } })
-          .select("symbol sectorName name -_id")
-          .lean()
-      : [];
+    const scripts = await findScriptsBySymbols(symbols);
 
     const metaBySymbol = new Map(
       scripts.map((item) => [
         item.symbol,
-        { sectorName: item.sectorName || "", name: item.name || "" }
-      ])
+        { sectorName: item.sectorName || "", name: item.name || "" },
+      ]),
     );
 
     const enriched = rows.map((row) => ({
       ...row,
       sector: metaBySymbol.get(row.script)?.sectorName || "",
-      name: metaBySymbol.get(row.script)?.name || ""
+      name: metaBySymbol.get(row.script)?.name || "",
     }));
 
     return res.status(200).json({ rows: enriched });
@@ -44,9 +43,7 @@ export const addWatchlistRow = async (req, res) => {
     }
 
     const normalizedScript = script.trim().toUpperCase();
-    const matchedScript = await Script.findOne({ symbol: normalizedScript })
-      .select("symbol -_id")
-      .lean();
+    const matchedScript = await findScriptBySymbol(normalizedScript);
 
     if (!matchedScript) {
       return res.status(400).json({ message: "Invalid script" });
@@ -63,7 +60,7 @@ export const addWatchlistRow = async (req, res) => {
       orderNumber:
         Number.isFinite(Number(orderNumber)) && Number(orderNumber) > 0
           ? Number(orderNumber)
-          : nextOrder
+          : nextOrder,
     });
 
     return res.status(201).json({ row });
@@ -87,24 +84,26 @@ export const reorderWatchlistRows = async (req, res) => {
     const uniqueRowIds = [...new Set(rowIds.map((id) => String(id)))];
     const rows = await Watchlist.find({
       user: req.user._id,
-      _id: { $in: uniqueRowIds }
+      _id: { $in: uniqueRowIds },
     }).select("_id");
 
     if (rows.length !== uniqueRowIds.length) {
-      return res.status(400).json({ message: "One or more watchlist rows are invalid" });
+      return res
+        .status(400)
+        .json({ message: "One or more watchlist rows are invalid" });
     }
 
     const bulkOps = uniqueRowIds.map((id, index) => ({
       updateOne: {
         filter: { _id: id, user: req.user._id },
-        update: { $set: { orderNumber: index + 1 } }
-      }
+        update: { $set: { orderNumber: index + 1 } },
+      },
     }));
 
     await Watchlist.bulkWrite(bulkOps, { ordered: true });
     const updatedRows = await Watchlist.find({ user: req.user._id }).sort({
       orderNumber: 1,
-      createdAt: 1
+      createdAt: 1,
     });
     return res.status(200).json({ rows: updatedRows });
   } catch (error) {
@@ -117,17 +116,21 @@ export const reorderWatchlistRows = async (req, res) => {
 export const deleteWatchlistRow = async (req, res) => {
   try {
     const { id } = req.params;
-    const row = await Watchlist.findOneAndDelete({ _id: id, user: req.user._id });
+    const row = await Watchlist.findOneAndDelete({
+      _id: id,
+      user: req.user._id,
+    });
 
     if (!row) {
       return res.status(404).json({ message: "Watchlist row not found" });
     }
 
-    return res.status(200).json({ message: "Watchlist row deleted successfully" });
+    return res
+      .status(200)
+      .json({ message: "Watchlist row deleted successfully" });
   } catch (error) {
     return res
       .status(500)
       .json({ message: "Server error while deleting watchlist row" });
   }
 };
-
