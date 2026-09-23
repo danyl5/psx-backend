@@ -147,11 +147,7 @@ export const updateMyTrade = async (req, res) => {
 
     row.status = getTradeStatus(row.buyPrice, row.sellPrice);
 
-    const preserveTimestamp =
-      row.sellPrice > 0 &&
-      (row.status === "profit" || row.status === "loss");
-
-    await row.save(preserveTimestamp ? { timestamps: false } : undefined);
+    await row.save();
     return res.status(200).json({ row });
   } catch (error) {
     return res
