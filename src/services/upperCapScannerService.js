@@ -11,8 +11,34 @@ const MAX_DAYS = 60;
 const SNAPSHOT_TTL_MS = 60 * 60 * 1000;
 const PRICE_HISTORY_TTL_MS = 24 * 60 * 60 * 1000;
 const REFRESH_CONCURRENCY = 2;
+// A forced rescan asks the provider about every script, so one that was
+// just done is not repeated.
+const FORCE_REFRESH_MIN_INTERVAL_MS = 2 * 60 * 1000;
 
 let refreshPromise = null;
+// The snapshot is large; it is kept in memory and read from the database
+// again only when a newer one has been saved.
+let snapshotCache = null;
+
+const getTime = (value) => (value ? new Date(value).getTime() : 0);
+
+const loadSnapshot = async () => {
+  const head = await UpperCapSnapshot.findOne({ key: "latest" })
+    .select("calculatedAt")
+    .lean();
+  if (!head) {
+    snapshotCache = null;
+    return null;
+  }
+
+  if (
+    !snapshotCache ||
+    getTime(snapshotCache.calculatedAt) !== getTime(head.calculatedAt)
+  ) {
+    snapshotCache = await UpperCapSnapshot.findOne({ key: "latest" }).lean();
+  }
+  return snapshotCache;
+};
 
 const getArrayResponse = (response) => {
   const data =
@@ -112,7 +138,9 @@ const calculateWindow = (symbol, history, days) => {
 
 const refreshHistory = async (symbol, existingHistory) => {
   try {
-    const response = await fetchStockPriceHistoryFromPSX(symbol, MAX_DAYS + 1);
+    const response = await fetchStockPriceHistoryFromPSX(symbol, MAX_DAYS + 1, {
+      useCache: false,
+    });
     const prices = normalizeHistory(response);
 
     if (!prices.length) return existingHistory;
@@ -162,7 +190,7 @@ export const getUpperCapScannerResults = async (
     Math.max(Number(requestedDays) || DEFAULT_DAYS, 5),
     MAX_DAYS,
   );
-  const snapshot = await UpperCapSnapshot.findOne({ key: "latest" }).lean();
+  const snapshot = await loadSnapshot();
 
   return {
     threshold: snapshot?.threshold || UPPER_CAP_THRESHOLD,
@@ -256,17 +284,17 @@ export const getUpperCapScannerResponse = async (
     Math.max(Number(requestedDays) || DEFAULT_DAYS, 5),
     MAX_DAYS,
   );
-  if (forceRefresh) {
-    await startUpperCapScannerRefresh(true);
-  } else {
-    const snapshot = await UpperCapSnapshot.findOne({ key: "latest" })
-      .select("calculatedAt")
-      .lean();
-    const isStale =
-      !snapshot ||
-      Date.now() - new Date(snapshot.calculatedAt).getTime() >= SNAPSHOT_TTL_MS;
+  const snapshot = await loadSnapshot();
+  const snapshotAgeMs = snapshot
+    ? Date.now() - getTime(snapshot.calculatedAt)
+    : Number.POSITIVE_INFINITY;
 
-    if (isStale) startUpperCapScannerRefresh();
+  if (forceRefresh) {
+    if (snapshotAgeMs >= FORCE_REFRESH_MIN_INTERVAL_MS) {
+      await startUpperCapScannerRefresh(true);
+    }
+  } else if (snapshotAgeMs >= SNAPSHOT_TTL_MS) {
+    startUpperCapScannerRefresh();
   }
 
   const response = await getUpperCapScannerResults(days);

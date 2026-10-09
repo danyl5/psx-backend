@@ -1,3 +1,4 @@
+import compression from "compression";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
@@ -27,6 +28,8 @@ app.use(
     origin: process.env.CLIENT_URL
   })
 );
+// Market lists and the scanner snapshot are large JSON; gzip shrinks them.
+app.use(compression());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -46,6 +49,18 @@ app.use("/api/psx", psxRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
+});
+
+// Anything a route did not handle itself (a malformed JSON body, an error
+// thrown outside a try/catch) still answers with JSON instead of an HTML page.
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+
+  const status = error.status || error.statusCode || 500;
+  if (status >= 500) console.error("Unhandled request error:", error);
+  return res.status(status).json({
+    message: status >= 500 ? "Server error" : error.message || "Bad request",
+  });
 });
 
 const PORT = process.env.PORT || 5000;

@@ -167,7 +167,9 @@ export const addDividend = async (req, res) => {
 
 export const getDividends = async (req, res) => {
   try {
-    const dividends = await Dividend.find({ user: req.user._id }).sort({ script: 1, date: -1, createdAt: -1 });
+    const dividends = await Dividend.find({ user: req.user._id })
+      .sort({ script: 1, date: -1, createdAt: -1 })
+      .lean();
     return res.status(200).json({ dividends });
   } catch (error) {
     return res.status(500).json({ message: "Server error while fetching dividend records" });

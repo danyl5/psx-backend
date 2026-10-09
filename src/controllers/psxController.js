@@ -15,42 +15,14 @@ import {
 } from "../services/notificationsService.js";
 import { getUpperCapScannerResponse } from "../services/upperCapScannerService.js";
 
-// Simple delay helper for retry logic
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// No page needs more symbols than this in one request; the cap keeps a
+// single request from flooding the data provider.
+const MAX_SYMBOLS_PER_REQUEST = 200;
 
-// Fetch a single symbol with basic retry so that intermittent
-// scraping/network issues don't randomly return null for one symbol.
-async function fetchStockPriceFromPSXWithRetry(
-  symbol,
-  { retries = 2, delayMs = 700 } = {},
-) {
-  let lastResult = null;
-
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      lastResult = await fetchStockPriceFromPSX(symbol);
-
-      // If we have a non-null price, consider it a success.
-      if (lastResult && lastResult.price != null) {
-        return lastResult;
-      }
-    } catch (err) {
-      // Swallow here; we'll retry below.
-      console.error(
-        `Error fetching price for ${symbol} (attempt ${attempt + 1} of ${retries + 1}):`,
-        err.message || err,
-      );
-    }
-
-    // If not the last attempt, wait a bit before retrying.
-    if (attempt < retries) {
-      await wait(delayMs);
-    }
-  }
-
-  // After all retries, return the last result (may still have price: null)
-  return lastResult || { symbol, price: null };
-}
+const tooManySymbols = (res) =>
+  res.status(400).json({
+    message: `At most ${MAX_SYMBOLS_PER_REQUEST} symbols are allowed per request.`,
+  });
 
 export const getMultipleStockPricesFromPSX = async (req, res) => {
   try {
@@ -75,12 +47,10 @@ export const getMultipleStockPricesFromPSX = async (req, res) => {
         .status(400)
         .json({ message: "At least one valid symbol is required." });
     }
+    if (symbols.length > MAX_SYMBOLS_PER_REQUEST) return tooManySymbols(res);
 
-    const results = await Promise.all(
-      symbols.map((symbol) =>
-        fetchStockPriceFromPSXWithRetry(symbol, { retries: 2, delayMs: 700 }),
-      ),
-    );
+    // Retries, caching and rate limiting live in the Sarmaaya client.
+    const results = await Promise.all(symbols.map(fetchStockPriceFromPSX));
 
     return res.status(200).json({ symbols, data: results });
   } catch (error) {
@@ -183,6 +153,10 @@ export const getDashboardMarketData = async (req, res) => {
         .json({ message: "symbols must be a non-empty array." });
     }
 
+    if (symbolsInput.length > MAX_SYMBOLS_PER_REQUEST) {
+      return tooManySymbols(res);
+    }
+
     const startDate = (req.body?.startDate || "").toString().trim();
     const endDate = (req.body?.endDate || "").toString().trim();
     const data = await fetchDashboardMarketDataFromPSX(symbolsInput, {
@@ -237,6 +211,10 @@ export const getBulkNotifications = async (req, res) => {
       return res
         .status(400)
         .json({ message: "symbols must be a non-empty array." });
+    }
+
+    if (symbolsInput.length > MAX_SYMBOLS_PER_REQUEST) {
+      return tooManySymbols(res);
     }
 
     const result = await getMultipleStockNotifications(symbolsInput);

@@ -9,14 +9,20 @@ const normalizeSymbols = (symbolsInput) => [
   ),
 ];
 
+// Dividends and announcements are looked up independently, so one of them
+// failing does not drop the notifications the other one found.
 const buildNotificationsForSymbol = async (symbol, { today, startDate }) => {
-  const [dividendRes, announcementRes] = await Promise.all([
+  const [dividendResult, announcementResult] = await Promise.allSettled([
     fetchStockDividendsFromPSX(symbol),
     fetchStockAnnouncementsFromPSX(symbol, {
       startDate,
       endDate: today,
     }),
   ]);
+  const dividendRes =
+    dividendResult.status === "fulfilled" ? dividendResult.value : null;
+  const announcementRes =
+    announcementResult.status === "fulfilled" ? announcementResult.value : null;
 
   const dividends = dividendRes?.response?.payoutHistory || [];
   const dividendNotifications = dividends
@@ -43,7 +49,12 @@ const buildNotificationsForSymbol = async (symbol, { today, startDate }) => {
       attachments: a.attachments,
     }));
 
-  return [...dividendNotifications, ...announcementNotifications];
+  return {
+    notifications: [...dividendNotifications, ...announcementNotifications],
+    failed:
+      dividendResult.status === "rejected" ||
+      announcementResult.status === "rejected",
+  };
 };
 
 export const getStockNotifications = async (symbol) => {
@@ -57,15 +68,16 @@ export const getStockNotifications = async (symbol) => {
     const formattedStart =
       startDate.toISOString().split("T")[0];
 
-    const notifications = (
-      await buildNotificationsForSymbol(symbol, {
-        today,
-        startDate: formattedStart,
-      })
-    ).sort((a, b) => new Date(a.date) - new Date(b.date));
+    const result = await buildNotificationsForSymbol(symbol, {
+      today,
+      startDate: formattedStart,
+    });
+    const notifications = result.notifications.sort(
+      (a, b) => new Date(a.date) - new Date(b.date),
+    );
 
     return {
-      success: true,
+      success: !result.failed,
       count: notifications.length,
       notifications,
     };
@@ -109,13 +121,15 @@ export const getMultipleStockNotifications = async (symbolsInput) => {
 
     const notifications = settled
       .flatMap((result) =>
-        result.status === "fulfilled" ? result.value : [],
+        result.status === "fulfilled" ? result.value.notifications : [],
       )
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const failedSymbols = settled
       .map((result, index) =>
-        result.status === "rejected" ? symbols[index] : null,
+        result.status === "rejected" || result.value.failed
+          ? symbols[index]
+          : null,
       )
       .filter(Boolean);
 

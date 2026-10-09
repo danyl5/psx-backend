@@ -1,21 +1,40 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import compactNumberFormat from "../utils/numberFormatting.js";
+import { getPSXMarketState } from "../utils/marketHours.js";
+import { fetchStockDetails, sarmaayaGet } from "./sarmaayaClient.js";
+import { rememberSector } from "./scriptService.js";
+
+const SECOND_MS = 1000;
+const MINUTE_MS = 60 * SECOND_MS;
+const HOUR_MS = 60 * MINUTE_MS;
+
+// How long each kind of answer is reused (ttlMs), and how much longer the
+// last good one stands in while the provider is failing (staleMs).
+const CACHE = {
+  dividends: { ttlMs: 15 * MINUTE_MS, staleMs: 24 * HOUR_MS },
+  announcements: { ttlMs: 5 * MINUTE_MS, staleMs: 6 * HOUR_MS },
+  stockInsiders: { ttlMs: 15 * MINUTE_MS, staleMs: 24 * HOUR_MS },
+  shariahStocks: { ttlMs: MINUTE_MS, staleMs: 6 * HOUR_MS },
+  marketCalendar: { ttlMs: 10 * MINUTE_MS, staleMs: 6 * HOUR_MS },
+  priceHistory: { ttlMs: 15 * MINUTE_MS, staleMs: 24 * HOUR_MS },
+};
+
+const symbolPath = (symbol) => encodeURIComponent(symbol);
 
 export async function fetchStockPriceFromPSX(symbol) {
   try {
-    const response = await axios.get(
-      `https://beta-restapi.sarmaaya.pk/api/stocks/${encodeURIComponent(symbol)}`,
-    );
-    const stock = response.data?.response;
+    const stock = await fetchStockDetails(symbol);
 
     if (!stock) return { symbol, price: null };
+
+    rememberSector(stock.symbol || symbol, stock.sectorName);
 
     return {
       symbol: stock.symbol || symbol,
       name: stock.name || "",
       logo: stock.logo || null,
       isshariah: stock.isshariah === true,
+      sectorName: stock.sectorName || "",
       price: stock.close ?? null,
       changeValue: stock.change ?? null,
       changePercentage: stock.change_percentage ?? null,
@@ -31,95 +50,76 @@ export async function fetchStockPriceFromPSX(symbol) {
   }
 }
 
-let marketUpdatesCache = null;
-let marketUpdatesCachedAt = 0;
-let marketUpdatesRequest = null;
 const MARKET_UPDATES_CACHE_TTL_MS = 60 * 1000;
-
-function getPSXMarketState(now = new Date()) {
-  const pakistanNow = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Karachi" }),
-  );
-
-  const day = pakistanNow.getDay(); // 0=Sun, 1=Mon, ..., 6=Sat
-  const currentMinutes = pakistanNow.getHours() * 60 + pakistanNow.getMinutes();
-
-  if (day === 0 || day === 6) return "Closed";
-
-  const isFriday = day === 5;
-  const openMinutes = isFriday ? 9 * 60 + 15 : 9 * 60 + 30;
-  const closeMinutes = isFriday ? 16 * 60 + 30 : 15 * 60 + 30;
-
-  return currentMinutes >= openMinutes && currentMinutes < closeMinutes
-    ? "Open"
-    : "Closed";
-}
+// A failed read of the PSX page is tried again sooner than a good one.
+const MARKET_UPDATES_RETRY_MS = 15 * 1000;
+const MARKET_UPDATES_TIMEOUT_MS = 10 * 1000;
+let marketUpdatesCache = null;
+let marketUpdatesFreshUntil = 0;
+let marketUpdatesLastGood = null;
+let marketUpdatesRequest = null;
 
 async function fetchMarketUpdatesUncachedFromPSX() {
-  try {
-    const url = "https://dps.psx.com.pk/";
-    const response = await axios.get(url, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-    });
-    const $ = cheerio.load(response.data);
-    const kse100Panel = $('.tabs__panel[data-name="KSE100"]');
-    const marketIndex = kse100Panel
-      .find(".marketIndices__price")
-      .contents()
-      .filter(function () {
-        return this.type === "text";
-      })
-      .text()
-      .trim();
-    const marketValueAndPercentage = kse100Panel
-      .find(".marketIndices__change")
-      .text()
-      .trim();
-    const marketDate = kse100Panel.find(".marketIndices__date").text().trim();
-    const marketTime = kse100Panel.attr("data-date");
+  const url = "https://dps.psx.com.pk/";
+  const response = await axios.get(url, {
+    headers: { "User-Agent": "Mozilla/5.0" },
+    timeout: MARKET_UPDATES_TIMEOUT_MS,
+  });
+  const $ = cheerio.load(response.data);
+  // Only the KSE100 tab; the price text without its child span.
+  const kse100Panel = $('.tabs__panel[data-name="KSE100"]');
+  const marketIndex = kse100Panel
+    .find(".marketIndices__price")
+    .contents()
+    .filter(function () {
+      return this.type === "text";
+    })
+    .text()
+    .trim();
+  const marketValueAndPercentage = kse100Panel
+    .find(".marketIndices__change")
+    .text()
+    .trim();
+  const marketDate = kse100Panel.find(".marketIndices__date").text().trim();
 
-    // ✅ Select ONLY KSE100 tab
-    // ✅ Get ONLY price text (exclude child span)
-    // ✅ Change value + percentage
-    // Derived from the REST response above.
+  if (!marketIndex) throw new Error("KSE100 index not found on the PSX page");
 
-    // Market time text
-    // Determine market state using PSX trading hours in Pakistan time
-    const marketState = getPSXMarketState();
-
-    return {
-      marketIndex,
-      marketValueAndPercentage,
-      marketDate,
-      marketState,
-    };
-  } catch (error) {
-    console.error("Error fetching market updates:", error.message);
-
-    return {
-      marketIndex: null,
-      marketValueAndPercentage: null,
-      marketDate: null,
-      marketState: "Closed",
-    };
-  }
+  return {
+    marketIndex,
+    marketValueAndPercentage,
+    marketDate,
+    marketState: getPSXMarketState(),
+  };
 }
 
 export async function fetchMarketUpdatesFromPSX() {
-  const now = Date.now();
-  if (
-    marketUpdatesCache &&
-    now - marketUpdatesCachedAt < MARKET_UPDATES_CACHE_TTL_MS
-  ) {
+  if (marketUpdatesCache && Date.now() < marketUpdatesFreshUntil) {
     return marketUpdatesCache;
   }
 
   if (!marketUpdatesRequest) {
     marketUpdatesRequest = fetchMarketUpdatesUncachedFromPSX()
       .then((data) => {
+        marketUpdatesLastGood = data;
         marketUpdatesCache = data;
-        marketUpdatesCachedAt = Date.now();
+        marketUpdatesFreshUntil = Date.now() + MARKET_UPDATES_CACHE_TTL_MS;
         return data;
+      })
+      .catch((error) => {
+        console.error("Error fetching market updates:", error.message);
+
+        // The last index that was read is still better than none; only the
+        // open/closed state is worked out again, since it depends on the clock.
+        marketUpdatesCache = marketUpdatesLastGood
+          ? { ...marketUpdatesLastGood, marketState: getPSXMarketState() }
+          : {
+              marketIndex: null,
+              marketValueAndPercentage: null,
+              marketDate: null,
+              marketState: "Closed",
+            };
+        marketUpdatesFreshUntil = Date.now() + MARKET_UPDATES_RETRY_MS;
+        return marketUpdatesCache;
       })
       .finally(() => {
         marketUpdatesRequest = null;
@@ -131,20 +131,26 @@ export async function fetchMarketUpdatesFromPSX() {
 
 export async function fetchStockDividendsFromPSX(symbol) {
   try {
-    const currentYear = String(new Date().getFullYear());
-    const response = await axios.get(
-      `https://beta-restapi.sarmaaya.pk/api/stocks/dividends/${symbol}`,
+    const data = await sarmaayaGet(
+      `/stocks/dividends/${symbolPath(symbol)}`,
+      CACHE.dividends,
     );
 
-    // Filter payoutHistory by current year
-    if (response.data.response?.payoutHistory) {
-      response.data.response.payoutHistory =
-        response.data.response.payoutHistory.filter(
-          (payout) => payout.year === currentYear,
-        );
-    }
+    // Only this year's payouts are returned. The cached answer is shared, so
+    // it is copied rather than changed.
+    const payoutHistory = data?.response?.payoutHistory;
+    if (!Array.isArray(payoutHistory)) return data;
 
-    return response.data;
+    const currentYear = String(new Date().getFullYear());
+    return {
+      ...data,
+      response: {
+        ...data.response,
+        payoutHistory: payoutHistory.filter(
+          (payout) => payout.year === currentYear,
+        ),
+      },
+    };
   } catch (error) {
     console.error("Error fetching dividends for", symbol, error.message);
     throw new Error("Failed to fetch dividends");
@@ -156,23 +162,15 @@ export async function fetchStockAnnouncementsFromPSX(
   { startDate, endDate } = {},
 ) {
   try {
-    const url = `https://beta-restapi.sarmaaya.pk/api/stocks/announcements/${symbol}`;
-    const params = new URLSearchParams();
-
-    if (startDate) params.set("startDate", String(startDate));
-    if (endDate) params.set("endDate", String(endDate));
-
-    const response = await axios.get(`${url}?${params.toString()}`);
-    return response.data;
+    return await sarmaayaGet(`/stocks/announcements/${symbolPath(symbol)}`, {
+      ...CACHE.announcements,
+      params: { startDate, endDate },
+    });
   } catch (error) {
     console.error("Error fetching announcements for", symbol, error.message);
     throw new Error("Failed to fetch announcements");
   }
 }
-
-const dashboardMarketDataCache = new Map();
-const dashboardMarketDataRequests = new Map();
-const DASHBOARD_MARKET_DATA_CACHE_TTL_MS = 5 * 60 * 1000;
 
 const getDividendDate = (payout) =>
   payout?.announcementDate ||
@@ -207,6 +205,8 @@ const sortDashboardDataByUpcomingExDate = (data) => {
   });
 };
 
+// Dividends and announcements are cached per symbol, so two users holding
+// the same script share one lookup even when their portfolios differ.
 export async function fetchDashboardMarketDataFromPSX(
   symbols,
   { startDate, endDate } = {},
@@ -218,17 +218,8 @@ export async function fetchDashboardMarketDataFromPSX(
         .filter(Boolean),
     ),
   ].sort();
-  const cacheKey = JSON.stringify({ normalizedSymbols, startDate, endDate });
-  const cached = dashboardMarketDataCache.get(cacheKey);
 
-  if (cached && cached.expiresAt > Date.now()) {
-    return cached.data;
-  }
-
-  const existingRequest = dashboardMarketDataRequests.get(cacheKey);
-  if (existingRequest) return existingRequest;
-
-  const request = Promise.all(
+  const data = await Promise.all(
     normalizedSymbols.map(async (symbol) => {
       const [dividends, announcements] = await Promise.allSettled([
         fetchStockDividendsFromPSX(symbol),
@@ -242,30 +233,17 @@ export async function fetchDashboardMarketDataFromPSX(
           announcements.status === "fulfilled" ? announcements.value : null,
       };
     }),
-  )
-    .then((data) => {
-      const result = { data: sortDashboardDataByUpcomingExDate(data) };
+  );
 
-      dashboardMarketDataCache.set(cacheKey, {
-        data: result,
-        expiresAt: Date.now() + DASHBOARD_MARKET_DATA_CACHE_TTL_MS,
-      });
-      return result;
-    })
-    .finally(() => {
-      dashboardMarketDataRequests.delete(cacheKey);
-    });
-
-  dashboardMarketDataRequests.set(cacheKey, request);
-  return request;
+  return { data: sortDashboardDataByUpcomingExDate(data) };
 }
 
 export async function fetchStockInsiderTransactionsFromPSX(symbol) {
   try {
-    const url = `https://beta-restapi.sarmaaya.pk/api/stocks/stock-insiders/${symbol}`;
-
-    const response = await axios.get(`${url}`);
-    return response.data;
+    return await sarmaayaGet(
+      `/stocks/stock-insiders/${symbolPath(symbol)}`,
+      CACHE.stockInsiders,
+    );
   } catch (error) {
     console.error(
       "Error fetching insider transactions for",
@@ -278,10 +256,10 @@ export async function fetchStockInsiderTransactionsFromPSX(symbol) {
 
 export async function fetchAllShariaStocks() {
   try {
-    const url =
-      "https://beta-restapi.sarmaaya.pk/api/indices/KMIALLSHR/companies";
-    const response = await axios.get(url);
-    return response.data;
+    return await sarmaayaGet(
+      "/indices/KMIALLSHR/companies",
+      CACHE.shariahStocks,
+    );
   } catch (error) {
     console.error("Error fetching all shariah stocks:", error.message);
     throw new Error("Failed to fetch shariah stocks");
@@ -290,15 +268,10 @@ export async function fetchAllShariaStocks() {
 
 export async function fetchAllUpcomingPayouts({ from, to }) {
   try {
-    const url = "https://beta-restapi.sarmaaya.pk/api/announcements/payouts";
-
-    const params = new URLSearchParams();
-
-    if (from) params.set("from", String(from));
-    if (to) params.set("to", String(to));
-
-    const response = await axios.get(`${url}?${params.toString()}`);
-    return response.data;
+    return await sarmaayaGet("/announcements/payouts", {
+      ...CACHE.marketCalendar,
+      params: { from, to },
+    });
   } catch (error) {
     console.error("Error fetching all upcoming payouts:", error.message);
     throw new Error("Failed to fetch upcoming payouts");
@@ -307,16 +280,10 @@ export async function fetchAllUpcomingPayouts({ from, to }) {
 
 export async function fetchAllUpcomingBoardMeetings({ from, to }) {
   try {
-    const url =
-      "https://beta-restapi.sarmaaya.pk/api/announcements/board-meetings";
-
-    const params = new URLSearchParams();
-
-    if (from) params.set("from", String(from));
-    if (to) params.set("to", String(to));
-
-    const response = await axios.get(`${url}?${params.toString()}`);
-    return response.data;
+    return await sarmaayaGet("/announcements/board-meetings", {
+      ...CACHE.marketCalendar,
+      params: { from, to },
+    });
   } catch (error) {
     console.error("Error fetching all upcoming board meetings:", error.message);
     throw new Error("Failed to fetch upcoming board meetings");
@@ -325,28 +292,31 @@ export async function fetchAllUpcomingBoardMeetings({ from, to }) {
 
 export async function fetchAllInsiderTransactions({ from, to }) {
   try {
-    const url =
-      "https://beta-restapi.sarmaaya.pk/api/announcements/insider-transactions";
-
-    const params = new URLSearchParams();
-
-    if (from) params.set("from", String(from));
-    if (to) params.set("to", String(to));
-
-    const response = await axios.get(`${url}?${params.toString()}`);
-    return response.data;
+    return await sarmaayaGet("/announcements/insider-transactions", {
+      ...CACHE.marketCalendar,
+      params: { from, to },
+    });
   } catch (error) {
     console.error("Error fetching all insider transactions:", error.message);
     throw new Error("Failed to fetch insider transactions");
   }
 }
 
-export async function fetchStockPriceHistoryFromPSX(symbol, days) {
+/**
+ * `useCache: false` always asks the provider. The upper-cap scanner uses it
+ * so a refresh never stores an old answer as if it were new.
+ */
+export async function fetchStockPriceHistoryFromPSX(
+  symbol,
+  days,
+  { useCache = true } = {},
+) {
   try {
-    const url = `https://beta-restapi.sarmaaya.pk/api/stocks/price-history/${symbol}?days=${days}`;
-
-    const response = await axios.get(url, { timeout: 10000 });
-    return response.data;
+    return await sarmaayaGet(`/stocks/price-history/${symbolPath(symbol)}`, {
+      ...CACHE.priceHistory,
+      params: { days },
+      useCache,
+    });
   } catch (error) {
     console.error("Error fetching stock price history:", {
       symbol,

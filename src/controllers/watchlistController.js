@@ -101,10 +101,12 @@ export const reorderWatchlistRows = async (req, res) => {
     }));
 
     await Watchlist.bulkWrite(bulkOps, { ordered: true });
-    const updatedRows = await Watchlist.find({ user: req.user._id }).sort({
-      orderNumber: 1,
-      createdAt: 1,
-    });
+    const updatedRows = await Watchlist.find({ user: req.user._id })
+      .sort({
+        orderNumber: 1,
+        createdAt: 1,
+      })
+      .lean();
     return res.status(200).json({ rows: updatedRows });
   } catch (error) {
     return res

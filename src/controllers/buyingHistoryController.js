@@ -67,11 +67,13 @@ export const addBuyingHistory = async (req, res) => {
 
 export const getBuyingHistory = async (req, res) => {
   try {
-    const buyingHistory = await BuyingHistory.find({ user: req.user._id }).sort({
-      script: 1,
-      date: -1,
-      createdAt: -1
-    });
+    const buyingHistory = await BuyingHistory.find({ user: req.user._id })
+      .sort({
+        script: 1,
+        date: -1,
+        createdAt: -1
+      })
+      .lean();
     return res.status(200).json({ buyingHistory });
   } catch (error) {
     return res.status(500).json({ message: "Server error while fetching buying history records" });

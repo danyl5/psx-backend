@@ -36,32 +36,15 @@ const getPortfolioRowFilter = (userId, portfolionumber) => {
   return { user: userId, portfolionumber: normalizedNumber };
 };
 
-const ensureDefaultPortfolioTab = async (userId) => {
-  let tabs = await PortfolioTab.find({ user: userId })
-    .sort({ portfolionumber: 1 })
-    .lean();
+const loadPortfolioTabs = (userId) =>
+  PortfolioTab.find({ user: userId }).sort({ portfolionumber: 1 }).lean();
 
-  if (!tabs.length) {
-    const defaultTab = await PortfolioTab.create({
-      user: userId,
-      portfolionumber: 1,
-      name: "Portfolio 1",
-    });
-    tabs = [defaultTab.toObject()];
-  }
+// Users whose rows from before portfolio tabs existed have already been
+// brought up to date since the server started. New rows are always saved
+// with their tab, so once per user is enough.
+const backfilledUsers = new Set();
 
-  const defaultTab = tabs.find((tab) => tab.portfolionumber === 1);
-  if (!defaultTab) {
-    const createdDefault = await PortfolioTab.create({
-      user: userId,
-      portfolionumber: 1,
-      name: "Portfolio 1",
-    });
-    tabs = [createdDefault.toObject(), ...tabs].sort(
-      (a, b) => a.portfolionumber - b.portfolionumber,
-    );
-  }
-
+const backfillLegacyPortfolioRows = async (userId, tabs) => {
   const nameByNumber = new Map(
     tabs.map((tab) => [tab.portfolionumber, tab.name]),
   );
@@ -86,6 +69,30 @@ const ensureDefaultPortfolioTab = async (userId) => {
       ),
     ),
   );
+};
+
+const ensureDefaultPortfolioTab = async (userId) => {
+  let tabs = await loadPortfolioTabs(userId);
+
+  if (!tabs.some((tab) => tab.portfolionumber === 1)) {
+    try {
+      await PortfolioTab.create({
+        user: userId,
+        portfolionumber: 1,
+        name: "Portfolio 1",
+      });
+    } catch (error) {
+      // Another request of the same user created it a moment earlier.
+      if (error?.code !== 11000) throw error;
+    }
+    tabs = await loadPortfolioTabs(userId);
+  }
+
+  const userKey = String(userId);
+  if (!backfilledUsers.has(userKey)) {
+    await backfillLegacyPortfolioRows(userId, tabs);
+    backfilledUsers.add(userKey);
+  }
 
   return tabs;
 };
@@ -274,16 +281,12 @@ export const getPortfolioRows = async (req, res) => {
       return res.status(404).json({ message: "Portfolio tab not found" });
     }
 
-    const rows = await Portfolio.find(
-      getPortfolioRowFilter(req.user._id, portfolionumber),
-    )
-      .sort({ orderNumber: 1, createdAt: 1 })
-      .lean();
-
-    const dividendTotalsByScript = await getDividendTotalsByScript(
-      req.user._id,
-      portfolionumber,
-    );
+    const [rows, dividendTotalsByScript] = await Promise.all([
+      Portfolio.find(getPortfolioRowFilter(req.user._id, portfolionumber))
+        .sort({ orderNumber: 1, createdAt: 1 })
+        .lean(),
+      getDividendTotalsByScript(req.user._id, portfolionumber),
+    ]);
     const rowsWithDividends = rows.map((row) => {
       const totals = dividendTotalsByScript.get(
         (row.script || "").toString().trim().toUpperCase(),
@@ -316,7 +319,11 @@ export const getPortfolioRows = async (req, res) => {
       });
     }
 
-    const scripts = await findScriptsBySymbols(symbolsMissingSector);
+    // Sectors are a nicety: the holdings still load when they cannot be
+    // looked up.
+    const scripts = await findScriptsBySymbols(symbolsMissingSector).catch(
+      () => [],
+    );
     const sectorBySymbol = new Map(
       scripts.map((item) => [item.symbol, item.sectorName || ""]),
     );
@@ -324,6 +331,21 @@ export const getPortfolioRows = async (req, res) => {
       ...row,
       sector: row.sector || sectorBySymbol.get(row.script) || "",
     }));
+
+    const sectorUpdates = enrichedRows
+      .filter((row, index) => row.sector && !rowsWithDividends[index].sector)
+      .map((row) => ({
+        updateOne: {
+          filter: { _id: row._id, user: req.user._id },
+          update: { $set: { sector: row.sector } },
+        },
+      }));
+    if (sectorUpdates.length) {
+      // Best effort: the response does not wait for it or depend on it.
+      Portfolio.bulkWrite(sectorUpdates).catch((error) =>
+        console.error("Error saving portfolio sectors:", error.message),
+      );
+    }
 
     return res.status(200).json({
       rows: normalizePortfolioRows(enrichedRows).map((row) => ({
@@ -425,9 +447,13 @@ export const updatePortfolioRow = async (req, res) => {
       if (!script.trim()) {
         return res.status(400).json({ message: "Script is required" });
       }
-      row.script = script.trim().toUpperCase();
+      const nextScript = script.trim().toUpperCase();
+      const scriptChanged = nextScript !== row.script;
+      row.script = nextScript;
       const matchedScript = await findScriptBySymbol(row.script);
-      row.sector = matchedScript?.sectorName || "";
+      // Keep the saved sector when the lookup finds none for the same script.
+      row.sector =
+        matchedScript?.sectorName || (scriptChanged ? "" : row.sector || "");
     }
 
     if (quantity !== undefined) {
@@ -498,10 +524,12 @@ export const reorderPortfolioRows = async (req, res) => {
     await Portfolio.bulkWrite(bulkOps, { ordered: true });
     const updatedRows = await Portfolio.find(
       getPortfolioRowFilter(req.user._id, normalizedPortfolioNumber),
-    ).sort({
-      orderNumber: 1,
-      createdAt: 1,
-    });
+    )
+      .sort({
+        orderNumber: 1,
+        createdAt: 1,
+      })
+      .lean();
     return res.status(200).json({ rows: updatedRows });
   } catch (error) {
     return res
