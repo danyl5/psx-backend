@@ -4,6 +4,8 @@ import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 import { fetchStockAnnouncementsFromPSX } from "../services/psxService.js";
 import { fetchDashboardMarketDataFromPSX } from "../services/psxService.js";
 import { fetchAllShariaStocks } from "../services/psxService.js";
+import { fetchStockSectors } from "../services/psxService.js";
+import { fetchStocksBySector } from "../services/psxService.js";
 import { fetchStockInsiderTransactionsFromPSX } from "../services/psxService.js";
 import { fetchAllUpcomingPayouts } from "../services/psxService.js";
 import { fetchAllUpcomingBoardMeetings } from "../services/psxService.js";
@@ -236,6 +238,38 @@ export const getAllShariahStocks = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch shariah stocks from PSX." });
+  }
+};
+
+export const getStockSectors = async (req, res) => {
+  try {
+    const data = await fetchStockSectors();
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getStockSectors controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch stock sectors from PSX." });
+  }
+};
+
+export const getStocksBySector = async (req, res) => {
+  try {
+    const sector = (req.query.sector || "").toString().trim();
+
+    if (!sector) {
+      return res.status(400).json({ message: "Sector is required." });
+    }
+
+    const data = await fetchStocksBySector(sector);
+
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("Error in getStocksBySector controller:", error);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch sector stocks from PSX." });
   }
 };
 

@@ -17,6 +17,8 @@ const CACHE = {
   shariahStocks: { ttlMs: MINUTE_MS, staleMs: 6 * HOUR_MS },
   marketCalendar: { ttlMs: 10 * MINUTE_MS, staleMs: 6 * HOUR_MS },
   priceHistory: { ttlMs: 15 * MINUTE_MS, staleMs: 24 * HOUR_MS },
+  sectors: { ttlMs: 24 * HOUR_MS, staleMs: 7 * 24 * HOUR_MS },
+  sectorStocks: { ttlMs: 5 * MINUTE_MS, staleMs: 24 * HOUR_MS },
 };
 
 const symbolPath = (symbol) => encodeURIComponent(symbol);
@@ -263,6 +265,29 @@ export async function fetchAllShariaStocks() {
   } catch (error) {
     console.error("Error fetching all shariah stocks:", error.message);
     throw new Error("Failed to fetch shariah stocks");
+  }
+}
+
+/** The names of every sector stocks are grouped into. */
+export async function fetchStockSectors() {
+  try {
+    return await sarmaayaGet("/stocks/sectors", CACHE.sectors);
+  } catch (error) {
+    console.error("Error fetching stock sectors:", error.message);
+    throw new Error("Failed to fetch stock sectors");
+  }
+}
+
+/** The listing of the stocks that belong to one sector. */
+export async function fetchStocksBySector(sector) {
+  try {
+    return await sarmaayaGet("/stocks/listing", {
+      ...CACHE.sectorStocks,
+      params: { sector, limit: 1000 },
+    });
+  } catch (error) {
+    console.error("Error fetching stocks of sector", sector, error.message);
+    throw new Error("Failed to fetch sector stocks");
   }
 }
 

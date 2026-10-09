@@ -6,6 +6,8 @@ import {
   getStockAnnouncements,
   getDashboardMarketData,
   getAllShariahStocks,
+  getStockSectors,
+  getStocksBySector,
   getNotifications,
   getStockInsiderTransactions,
   getAllUpcomingPayouts,
@@ -47,6 +49,12 @@ router.get("/insider-transactions", getAllInsiderTransactions);
 router.get("/insider-transactions/:symbol", getStockInsiderTransactions);
 
 router.get("/shariah-stocks", getAllShariahStocks);
+
+// GET /api/psx/sectors
+router.get("/sectors", getStockSectors);
+
+// GET /api/psx/sector-stocks?sector=CEMENT
+router.get("/sector-stocks", getStocksBySector);
 
 // GET /api/psx/upper-cap-scanner?days=30
 router.get("/upper-cap-scanner", getUpperCapScanner);
