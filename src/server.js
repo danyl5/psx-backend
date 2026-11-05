@@ -13,6 +13,7 @@ import userRoutes from "./routes/userRoutes.js";
 import psxRoutes from "./routes/psxRoutes.js";
 import watchlistRoutes from "./routes/watchlistRoutes.js";
 import myTradeRoutes from "./routes/myTradeRoutes.js";
+import mutualFundRoutes from "./routes/mutualFundRoutes.js";
 import dns from 'node:dns';
 
 dns.setServers(['8.8.8.8', '8.8.4.4']);
@@ -45,6 +46,7 @@ app.use("/api/scripts", scriptsRoutes);
 app.use("/api/dividends", dividendRoutes);
 app.use("/api/buying-history", buyingHistoryRoutes);
 app.use("/api/budget-allocation", budgetAllocationRoutes);
+app.use("/api/mutual-funds", mutualFundRoutes);
 app.use("/api/psx", psxRoutes);
 
 app.use((req, res) => {
