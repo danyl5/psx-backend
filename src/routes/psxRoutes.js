@@ -1,3 +1,4 @@
+import protect from "../middleware/authMiddleware.js";
 import { Router } from "express";
 import {
   getStockPrice,
@@ -35,7 +36,7 @@ router.get("/dividends/:symbol", getStockDividends);
 router.get("/announcements/:symbol", getStockAnnouncements);
 
 // POST /api/psx/dashboard-data { symbols, startDate, endDate }
-router.post("/dashboard-data", getDashboardMarketData);
+router.post("/dashboard-data", protect, getDashboardMarketData);
 
 // GET /api/psx/payouts?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
 router.get("/payouts", getAllUpcomingPayouts);

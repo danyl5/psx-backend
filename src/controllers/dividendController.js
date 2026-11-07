@@ -1,5 +1,6 @@
 import Dividend from "../models/Dividend.js";
 import Portfolio from "../models/Portfolio.js";
+import { fetchStockDividendsFromPSX } from "../services/psxService.js";
 
 const sanitizeNumber = (value) => {
   const number = Number(value);
@@ -165,17 +166,58 @@ export const addDividend = async (req, res) => {
   }
 };
 
+export const getDividendSummary = async (user, dividends) => {
+  const faceValues = new Map();
+  if (user?.zakatDeductible !== false) {
+    const scripts = [...new Set(dividends.map((record) => record.script).filter(Boolean))];
+    await Promise.all(scripts.map(async (script) => {
+      try {
+        const response = await fetchStockDividendsFromPSX(script);
+        const payouts = response?.response?.payoutHistory || [];
+        const faceValue = Number(payouts.find((item) => Number(item?.faceValue) > 0)?.faceValue);
+        faceValues.set(script.toUpperCase(), Number.isFinite(faceValue) && faceValue > 0 ? faceValue : 10);
+      } catch {
+        faceValues.set(script.toUpperCase(), 10);
+      }
+    }));
+  }
+
+  const totals = dividends.reduce(
+    (sum, record) => {
+      const totalDividend = sanitizeNumber(record.totalDividend);
+      const totalAfterTax = sanitizeNumber(record.totalAfterTax);
+      sum.totalDividend += totalDividend;
+      sum.totalAfterTax += totalAfterTax;
+      if (user?.zakatDeductible !== false) {
+        const faceValue = faceValues.get((record.script || "").toUpperCase()) || 10;
+        sum.totalAfterZakat += Math.max(
+          totalAfterTax - sanitizeNumber(record.shares) * faceValue * 0.025,
+          0
+        );
+      }
+      return sum;
+    },
+    { totalDividend: 0, totalAfterTax: 0, totalAfterZakat: 0 }
+  );
+
+  return {
+    totalDividend: totals.totalDividend,
+    totalAfterTax: totals.totalAfterTax,
+    totalAfterZakat: user?.zakatDeductible === false ? null : totals.totalAfterZakat
+  };
+};
+
 export const getDividends = async (req, res) => {
   try {
     const dividends = await Dividend.find({ user: req.user._id })
       .sort({ script: 1, date: -1, createdAt: -1 })
       .lean();
-    return res.status(200).json({ dividends });
+    const totals = await getDividendSummary(req.user, dividends);
+    return res.status(200).json({ dividends, totals });
   } catch (error) {
     return res.status(500).json({ message: "Server error while fetching dividend records" });
   }
 };
-
 export const deleteDividend = async (req, res) => {
   try {
     const { id } = req.params;

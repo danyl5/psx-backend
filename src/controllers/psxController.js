@@ -16,6 +16,10 @@ import {
   getStockNotifications,
 } from "../services/notificationsService.js";
 import { getUpperCapScannerResponse } from "../services/upperCapScannerService.js";
+import Portfolio from "../models/Portfolio.js";
+import MyTrade from "../models/MyTrade.js";
+import Dividend from "../models/Dividend.js";
+import { getDividendSummary } from "./dividendController.js";
 
 // No page needs more symbols than this in one request; the cap keeps a
 // single request from flooding the data provider.
@@ -148,30 +152,53 @@ export const getStockAnnouncements = async (req, res) => {
 export const getDashboardMarketData = async (req, res) => {
   try {
     const symbolsInput = req.body?.symbols;
-
-    if (!Array.isArray(symbolsInput) || symbolsInput.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "symbols must be a non-empty array." });
+    if (!Array.isArray(symbolsInput)) {
+      return res.status(400).json({ message: "symbols must be an array." });
     }
+    if (symbolsInput.length > MAX_SYMBOLS_PER_REQUEST) return tooManySymbols(res);
 
-    if (symbolsInput.length > MAX_SYMBOLS_PER_REQUEST) {
-      return tooManySymbols(res);
-    }
-
+    const userId = req.user._id;
+    const [portfolioRows, trades, dividendRecords] = await Promise.all([
+      Portfolio.find({ user: userId }).select("script quantity avgPrice").lean(),
+      MyTrade.find({ user: userId }).select("quantity buyPrice sellPrice").lean(),
+      Dividend.find({ user: userId }).select("script shares totalDividend totalAfterTax").lean(),
+    ]);
     const startDate = (req.body?.startDate || "").toString().trim();
     const endDate = (req.body?.endDate || "").toString().trim();
-    const data = await fetchDashboardMarketDataFromPSX(symbolsInput, {
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
-    });
+    const [marketData, dividendTotals] = await Promise.all([
+      fetchDashboardMarketDataFromPSX(symbolsInput, {
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+      }),
+      getDividendSummary(req.user, dividendRecords),
+    ]);
 
-    return res.status(200).json(data);
+    const symbols = new Set(portfolioRows.map((row) => (row.script || "").toString().trim().toUpperCase()).filter(Boolean));
+    const totalInvestment = portfolioRows.reduce((sum, row) => {
+      const quantity = Number(row.quantity);
+      const averagePrice = Number(row.avgPrice);
+      return sum + (Number.isFinite(quantity) && Number.isFinite(averagePrice) ? quantity * averagePrice : 0);
+    }, 0);
+    const activeTrades = trades.filter((trade) => !Number(trade.sellPrice));
+    const activeTradesInvested = activeTrades.reduce((sum, trade) => {
+      const quantity = Number(trade.quantity);
+      const buyPrice = Number(trade.buyPrice);
+      return sum + (Number.isFinite(quantity) && Number.isFinite(buyPrice) ? quantity * buyPrice : 0);
+    }, 0);
+
+    return res.status(200).json({
+      ...marketData,
+      stats: {
+        totalScripts: symbols.size,
+        totalInvestment,
+        ...dividendTotals,
+        activeTradesCount: activeTrades.length,
+        activeTradesInvested,
+      },
+    });
   } catch (error) {
     console.error("Error in getDashboardMarketData controller:", error);
-    return res
-      .status(500)
-      .json({ message: "Failed to fetch dashboard market data from PSX." });
+    return res.status(500).json({ message: "Failed to fetch dashboard data." });
   }
 };
 
