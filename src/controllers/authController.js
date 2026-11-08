@@ -102,12 +102,16 @@ export const login = async (req, res) => {
       });
     }
 
+    user.lastLoginAt = new Date();
+    await user.save();
+
     return res.status(200).json({
       token: generateToken(user._id),
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
+        lastLoginAt: user.lastLoginAt,
         budgetAmount: user.budgetAmount ?? 0,
         filer: user.filer ?? true,
         zakatDeductible: user.zakatDeductible ?? true,

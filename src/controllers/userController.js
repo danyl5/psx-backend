@@ -10,6 +10,7 @@ export const getProfile = async (req, res) => {
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,
+      lastLoginAt: req.user.lastLoginAt ?? null,
       budgetAmount: req.user.budgetAmount ?? 0,
       filer: req.user.filer ?? true,
       zakatDeductible: req.user.zakatDeductible ?? true,
